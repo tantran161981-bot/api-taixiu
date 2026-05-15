@@ -106,7 +106,7 @@ let apiResponseData = {
         "sai": 0,
         "ti_le": "0%"
     },
-    "id": "@h"
+    "id": "@nhan161019"
 };
 
 // ==================== TAI XIU ANALYZER ====================
