@@ -1,0 +1,26 @@
+{
+  "name": "tai-xiu-predictor-api",
+  "version": "9.0.0",
+  "description": "Tài Xỉu Predictor API - Thuật toán dự đoán siêu cấp",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["tai-xiu", "predictor", "api", "gambling", "algorithm"],
+  "author": "@tiendataox",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  }
+}
