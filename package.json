@@ -1,0 +1,14 @@
+{
+  "name": "tai-xiu-api",
+  "version": "1.0.0",
+  "description": "API dự đoán Tài Xỉu từ thuật toán Supreme Ultimate V3",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
+  }
+}
