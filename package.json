@@ -1,0 +1,20 @@
+{
+  "name": "taixiu-ai-super",
+  "version": "3.0.0",
+  "description": "Thuật toán dự đoán Tài Xỉu với AI 7 lớp, tỷ lệ 65-70%",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["taixiu", "prediction", "ai", "markov", "bayesian"],
+  "author": "@tiendataox",
+  "license": "MIT"
+}
