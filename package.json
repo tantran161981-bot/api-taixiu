@@ -1,0 +1,21 @@
+{
+  "name": "lc79-taixiu-api",
+  "version": "1.0.0",
+  "description": "Tài Xỉu Prediction API for LC79",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Build completed'"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "express": "4.18.2",
+    "axios": "1.6.0",
+    "cors": "2.8.5"
+  },
+  "keywords": ["taixiu", "prediction", "api"],
+  "author": "@Tskhang",
+  "license": "MIT"
+}
