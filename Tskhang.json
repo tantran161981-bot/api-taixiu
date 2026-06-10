@@ -1,0 +1,2798 @@
+{
+  "hu": {
+    "predictions": [
+      {
+        "phien": "6788828",
+        "prediction": "Tài",
+        "confidence": 83,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Xu Hướng Mạnh (6/8 Xỉu → Đảo Tài)"
+        ],
+        "timestamp": "2026-06-09T12:29:06.321Z",
+        "verified": false,
+        "actual": null,
+        "isCorrect": null
+      },
+      {
+        "phien": "6788827",
+        "prediction": "Tài",
+        "confidence": 75,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Cầu Nhịp Nghiêng (4/5 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T) → Tài",
+          "Xu Hướng Mạnh (6/8 Xỉu → Đảo Tài)"
+        ],
+        "timestamp": "2026-06-09T12:28:06.067Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6788826",
+        "prediction": "Tài",
+        "confidence": 78,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Hỗ trợ 7 → Tài",
+          "Cầu Bệt 6 phiên",
+          "Cầu 3-3 (2 bộ ba)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng (5/5 Xỉu)",
+          "Xu Hướng Cực (2T-8X) → Đảo",
+          "Bẻ Chuỗi 6 (Xỉu → Tài)"
+        ],
+        "timestamp": "2026-06-09T12:27:51.332Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6788826",
+        "prediction": "Tài",
+        "confidence": 78,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Hỗ trợ 7 → Tài",
+          "Cầu Bệt 6 phiên",
+          "Cầu 3-3 (2 bộ ba)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng (5/5 Xỉu)",
+          "Xu Hướng Cực (2T-8X) → Đảo",
+          "Bẻ Chuỗi 6 (Xỉu → Tài)"
+        ],
+        "timestamp": "2026-06-09T12:27:11.623Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721605",
+        "prediction": "Tài",
+        "confidence": 92,
+        "patterns": [
+          "Tổng Phân Tích (Tổng giảm 4.0 → Tài)",
+          "Đảo Chiều (Chuỗi Xỉu-Tài-Xỉu-Tài-Xỉu → Tài)",
+          "Cầu Đảo 1-1 (6 phiên)",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:29:25.081Z",
+        "verified": false,
+        "actual": null,
+        "isCorrect": null
+      },
+      {
+        "phien": "6721604",
+        "prediction": "Xỉu",
+        "confidence": 89,
+        "patterns": [
+          "Tổng Phân Tích (Tổng giảm 3.6 → Tài)",
+          "Xu Hướng Mạnh (6/8 Tài → Đảo Xỉu)",
+          "Đảo Chiều (Chuỗi Tài-Xỉu-Tài-Xỉu-Tài → Xỉu)",
+          "Xu Hướng Cực (8T-2X) → Đảo",
+          "Cầu Đảo 1-1 (5 phiên)",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:27:55.095Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721603",
+        "prediction": "Tài",
+        "confidence": 80,
+        "patterns": [
+          "Tổng Phân Tích (Tổng giảm 2.4 → Tài)",
+          "Xu Hướng Mạnh (6/8 Tài → Đảo Xỉu)",
+          "Xu Hướng Cực (8T-2X) → Đảo",
+          "Cầu Đảo 1-1 (4 phiên)",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:26:55.053Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721602",
+        "prediction": "Tài",
+        "confidence": 84,
+        "patterns": [
+          "Tổng Phân Tích (Tổng giảm 1.6 → Tài)",
+          "Xu Hướng Mạnh (7/8 Tài → Đảo Xỉu)",
+          "Xu Hướng Cực (9T-1X) → Đảo",
+          "Cầu Nhịp Nghiêng (4/5 Tài)",
+          "Cầu 3 Ván 1 (3T-1X) → Xỉu",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:60% - X:40%)"
+        ],
+        "timestamp": "2026-04-15T20:25:55.072Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721601",
+        "prediction": "Xỉu",
+        "confidence": 92,
+        "patterns": [
+          "Tổng Phân Tích (Tổng giảm 1.8 → Tài)",
+          "Xu Hướng Mạnh (7/8 Tài → Đảo Xỉu)",
+          "Xu Hướng Cực (8T-2X) → Đảo",
+          "Cầu Nhịp Nghiêng (4/5 Tài)",
+          "Cầu 3 Ván 1 (3T-1X) → Xỉu",
+          "Phân bố lệch (T:60% - X:40%)"
+        ],
+        "timestamp": "2026-04-15T20:24:25.088Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721600",
+        "prediction": "Xỉu",
+        "confidence": 92,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 8 về Tài → Xỉu)",
+          "Xu Hướng Mạnh (8/8 Tài → Đảo Xỉu)",
+          "Cầu Rồng 8 phiên (Bẻ mạnh)",
+          "Bẻ Chuỗi 8 (Tài → Xỉu)",
+          "4 Cặp Cùng Tài → Bẻ Xỉu",
+          "Xu Hướng Cực (9T-1X) → Đảo",
+          "Cầu Bệt 8 phiên Tài",
+          "Cầu 3-3 (2 bộ ba)",
+          "Cầu Nhịp Nghiêng (5/5 Tài)",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:60% - X:40%)"
+        ],
+        "timestamp": "2026-04-15T20:23:25.015Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721599",
+        "prediction": "Tài",
+        "confidence": 78,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 6 về Tài → Xỉu)",
+          "Xu Hướng Mạnh (7/8 Tài → Đảo Xỉu)",
+          "Cầu Rồng 7 phiên (Bẻ mạnh)",
+          "Bẻ Chuỗi 7 (Tài → Xỉu)",
+          "Xu Hướng Cực (8T-2X) → Đảo",
+          "Cầu Bệt 7 phiên Tài",
+          "Cầu 3-3 (2 bộ ba)",
+          "Cầu Nhịp Nghiêng (5/5 Tài)",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:22:25.045Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721598",
+        "prediction": "Tài",
+        "confidence": 74,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 6 về Tài → Xỉu)",
+          "Xu Hướng Mạnh (7/8 Tài → Đảo Xỉu)",
+          "Cầu Rồng 6 phiên (Bẻ mạnh)",
+          "Bẻ Chuỗi 6 (Tài → Xỉu)",
+          "Xu Hướng Cực (8T-2X) → Đảo",
+          "Cầu Bệt 6 phiên Tài",
+          "Cầu 3-3 (2 bộ ba)",
+          "Cầu Nhịp Nghiêng (5/5 Tài)",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:20:55.016Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721597",
+        "prediction": "Tài",
+        "confidence": 74,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 6 về Tài → Xỉu)",
+          "Xu Hướng Mạnh (6/8 Tài → Đảo Xỉu)",
+          "Bẻ Chuỗi 5 (Tài → Xỉu)",
+          "Xu Hướng Cực (8T-2X) → Đảo",
+          "Cầu Bệt 5 phiên Tài",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhịp Nghiêng (5/5 Tài)",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:19:54.998Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721596",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 4 về Tài → Xỉu)",
+          "Xu Hướng Mạnh (6/8 Tài → Đảo Xỉu)",
+          "Cầu Bệt 4 phiên Tài",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhịp Nghiêng (4/5 Tài)",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:18:54.943Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721595",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 4 về Tài → Xỉu)",
+          "Xu Hướng Mạnh (6/8 Tài → Đảo Xỉu)",
+          "Cầu Bệt 3 phiên Tài",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhịp Nghiêng (4/5 Tài)",
+          "Cầu 3 Ván 1 (3T-1X) → Xỉu",
+          "Cầu Nhảy Cóc",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:17:24.968Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721594",
+        "prediction": "Xỉu",
+        "confidence": 83,
+        "patterns": [
+          "Cầu 3 Ván 1 (3T-1X) → Xỉu",
+          "Phân bố lệch (T:58% - X:42%)"
+        ],
+        "timestamp": "2026-04-15T20:16:24.951Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721593",
+        "prediction": "Xỉu",
+        "confidence": 92,
+        "patterns": [
+          "Đảo Chiều (Chuỗi Tài-Xỉu-Tài-Xỉu-Tài → Xỉu)",
+          "Cầu Đảo 1-1 (5 phiên)",
+          "Cầu Nhảy Cóc"
+        ],
+        "timestamp": "2026-04-15T20:15:24.909Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721593",
+        "prediction": "Xỉu",
+        "confidence": 92,
+        "patterns": [
+          "Đảo Chiều (Chuỗi Tài-Xỉu-Tài-Xỉu-Tài → Xỉu)",
+          "Cầu Đảo 1-1 (5 phiên)",
+          "Cầu Nhảy Cóc"
+        ],
+        "timestamp": "2026-04-15T20:15:04.276Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:55.320Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:54.378Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:53.878Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:53.082Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:52.336Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:49.727Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:22.213Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:21.690Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:21.440Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:21.187Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:20.939Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:20.690Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:20.105Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:14:01.247Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:13:59.638Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721592",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:13:58.365Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721591",
+        "prediction": "Xỉu",
+        "confidence": 99,
+        "patterns": [
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Biểu Đồ Đường (2 lên 1 xuống → Xỉu)",
+          "Momentum Đảo Chiều (+7 → Xỉu)",
+          "Kháng Cự (Tổng 14 ≥ 14 → Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:12:49.307Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721590",
+        "prediction": "Xỉu",
+        "confidence": 92,
+        "patterns": [
+          "Cầu 1-2-1",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:11:49.253Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721589",
+        "prediction": "Xỉu",
+        "confidence": 80,
+        "patterns": [
+          "Cầu Nhịp Nghiêng 7 (5 Tài)",
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Cầu Gấp 3 (mỗi 3 phiên)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)",
+          "Gần Kháng Cự (13 → 14)",
+          "Sóng Thu Hẹp (2-1-1-1 → Theo Tài)"
+        ],
+        "timestamp": "2026-04-15T20:10:49.264Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721589",
+        "prediction": "Xỉu",
+        "confidence": 80,
+        "patterns": [
+          "Cầu Nhịp Nghiêng 7 (5 Tài)",
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Cầu Gấp 3 (mỗi 3 phiên)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)",
+          "Gần Kháng Cự (13 → 14)",
+          "Sóng Thu Hẹp (2-1-1-1 → Theo Tài)"
+        ],
+        "timestamp": "2026-04-15T20:10:39.022Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721588",
+        "prediction": "Tài",
+        "confidence": 65,
+        "patterns": [
+          "Cầu Đảo 1-1 (5 phiên)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 7 (5 Tài)",
+          "Cầu Gấp 4 (mỗi 4 phiên)",
+          "Cầu Ziczac (3 lần)",
+          "Biểu Đồ Đường (2 lên 1 xuống → Xỉu)",
+          "Cầu Liên Tục 1-2-1-2 (Bẻ → Xỉu)",
+          "Momentum Đảo Chiều (+7 → Xỉu)",
+          "Gần Kháng Cự (13 → 15)"
+        ],
+        "timestamp": "2026-04-15T20:09:19.252Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721587",
+        "prediction": "Xỉu",
+        "confidence": 68,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)",
+          "Cầu 2-1-2 Đảo",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)",
+          "Cầu Liên Tục 1-2-1-2 (Bẻ → Tài)",
+          "Momentum Đảo Chiều (-6 → Tài)",
+          "Sóng Mở Rộng (1-1-1-3 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:08:19.298Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721586",
+        "prediction": "Tài",
+        "confidence": 76,
+        "patterns": [
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Tài)",
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Đảo Xu Hướng (4T-1X → 1T-4X)",
+          "Cầu 1-1-2-2-1 (Bẻ → Xỉu)",
+          "Biểu Đồ Đường (Biên độ max 6-1 - Bẻ)",
+          "Momentum Đảo Chiều (+7 → Xỉu)",
+          "Fibonacci Cực (5/7 → Bẻ Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:07:19.223Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721585",
+        "prediction": "Xỉu",
+        "confidence": 97,
+        "patterns": [
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Cầu Gấp 4 (mỗi 4 phiên)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:05:49.204Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721584",
+        "prediction": "Tài",
+        "confidence": 71,
+        "patterns": [
+          "Cầu Bệt 3 phiên",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Tài)",
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Cầu Gấp 4 (mỗi 4 phiên)",
+          "Đảo Xu Hướng (4T-1X → 1T-4X)",
+          "Cầu 2-2-1-1 (Theo → Xỉu)",
+          "Biến động ngắn hạn mạnh",
+          "Gần Kháng Cự (13 → 15)",
+          "Đỉnh Sóng (3 > avg 1.7 → Bẻ)",
+          "Fibonacci Cực (5/7 → Bẻ Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:04:49.179Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721583",
+        "prediction": "Xỉu",
+        "confidence": 84,
+        "patterns": [
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Momentum Đảo Chiều (-10 → Tài)",
+          "Gần Kháng Cự (13 → 15)"
+        ],
+        "timestamp": "2026-04-15T20:03:19.155Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721582",
+        "prediction": "Tài",
+        "confidence": 72,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)",
+          "Cầu 2-1-2 Đảo",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Xỉu)",
+          "Cầu Liên Tục 1-2-1-2 (Bẻ → Xỉu)",
+          "Momentum Đảo Chiều (+15 → Xỉu)",
+          "Gần Kháng Cự (14 → 15)",
+          "Sóng Mở Rộng (1-1-1-3 → Bẻ Xỉu)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:02:19.154Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721581",
+        "prediction": "Tài",
+        "confidence": 86,
+        "patterns": [
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Cầu Gấp 3 (mỗi 3 phiên)",
+          "Cầu 1-1-2-2-1 (Bẻ → Tài)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)",
+          "Momentum Đảo Chiều (-7 → Tài)",
+          "Hỗ Trợ (Tổng 5 ≤ 6 → Tài)"
+        ],
+        "timestamp": "2026-04-15T20:01:19.094Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721581",
+        "prediction": "Tài",
+        "confidence": 86,
+        "patterns": [
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Cầu Gấp 3 (mỗi 3 phiên)",
+          "Cầu 1-1-2-2-1 (Bẻ → Tài)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)",
+          "Momentum Đảo Chiều (-7 → Tài)",
+          "Hỗ Trợ (Tổng 5 ≤ 6 → Tài)"
+        ],
+        "timestamp": "2026-04-15T20:01:03.333Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721581",
+        "prediction": "Tài",
+        "confidence": 86,
+        "patterns": [
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Cầu Gấp 3 (mỗi 3 phiên)",
+          "Cầu 1-1-2-2-1 (Bẻ → Tài)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Tài)",
+          "Momentum Đảo Chiều (-7 → Tài)",
+          "Hỗ Trợ (Tổng 5 ≤ 6 → Tài)"
+        ],
+        "timestamp": "2026-04-15T20:01:01.796Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721580",
+        "prediction": "Tài",
+        "confidence": 81,
+        "patterns": [
+          "Cầu 3 Ván 1 (3X-1T)"
+        ],
+        "timestamp": "2026-04-15T19:59:49.077Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721579",
+        "prediction": "Tài",
+        "confidence": 91,
+        "patterns": [
+          "Cầu Bệt 3 phiên",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Cầu Gấp 4 (mỗi 4 phiên)",
+          "Xu Hướng Cực (2T-8X trong 10 phiên)",
+          "Cầu 2-2-1-1 (Theo → Tài)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Xỉu)",
+          "Fibonacci (0T-7X → Bẻ Tài)",
+          "Gần Hỗ Trợ (10 → 8)",
+          "Sóng Thu Hẹp (3-1-1-1 → Theo Xỉu)",
+          "Fibonacci Cực (7/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T19:58:49.072Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6721578",
+        "prediction": "Tài",
+        "confidence": 84,
+        "patterns": [
+          "Cầu Nhịp Nghiêng 7 (5 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Biểu Đồ Đường (2 xúc xắc giống - Bẻ Xỉu)",
+          "Momentum Đảo Chiều (+7 → Xỉu)",
+          "Hỗ Trợ (Tổng 8 ≤ 8 → Tài)",
+          "Sóng Thu Hẹp (2-1-1-1 → Theo Xỉu)"
+        ],
+        "timestamp": "2026-04-15T19:57:49.101Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6721577",
+        "prediction": "Tài",
+        "confidence": 96,
+        "patterns": [
+          "Cầu Đảo 1-1 (5 phiên)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 7 (5 Xỉu)",
+          "Cầu Ziczac (3 lần)",
+          "Biểu Đồ Đường (3 dây cùng xuống → Theo Tài)",
+          "Cầu Liên Tục 1-2-1-2 (Bẻ → Tài)",
+          "Momentum Đảo Chiều (-14 → Tài)",
+          "Hỗ Trợ (Tổng 8 ≤ 8 → Tài)"
+        ],
+        "timestamp": "2026-04-15T19:56:24.288Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      }
+    ],
+    "patternStats": {
+      "cau_bet": {
+        "total": 8,
+        "correct": 7,
+        "accuracy": 0.875,
+        "recentResults": [
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:24:25.085Z"
+      },
+      "cau_dao_11": {
+        "total": 24,
+        "correct": 20,
+        "accuracy": 0.8333333333333334,
+        "recentResults": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.078Z"
+      },
+      "cau_22": {
+        "total": 2,
+        "correct": 1,
+        "accuracy": 0.5,
+        "recentResults": [
+          1,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:05:49.203Z"
+      },
+      "cau_33": {
+        "total": 8,
+        "correct": 7,
+        "accuracy": 0.875,
+        "recentResults": [
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:24:25.085Z"
+      },
+      "cau_121": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:12:49.305Z"
+      },
+      "cau_123": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_321": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_nhay_coc": {
+        "total": 17,
+        "correct": 11,
+        "accuracy": 0.6470588235294118,
+        "recentResults": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.078Z"
+      },
+      "cau_nhip_nghieng": {
+        "total": 19,
+        "correct": 13,
+        "accuracy": 0.6842105263157895,
+        "recentResults": [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:26:55.051Z"
+      },
+      "cau_3van1": {
+        "total": 17,
+        "correct": 8,
+        "accuracy": 0.47058823529411764,
+        "recentResults": [
+          0,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:26:55.051Z"
+      },
+      "cau_be_cau": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_chu_ky": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "distribution": {
+        "total": 11,
+        "correct": 8,
+        "accuracy": 0.7272727272727273,
+        "recentResults": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.078Z"
+      },
+      "dice_pattern": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "sum_trend": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "edge_cases": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "momentum": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:05:49.203Z"
+      },
+      "cau_tu_nhien": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "dice_trend_line": {
+        "total": 15,
+        "correct": 9,
+        "accuracy": 0.6,
+        "recentResults": [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:13:58.360Z"
+      },
+      "dice_trend_line_md5": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "break_pattern_hu": {
+        "total": 4,
+        "correct": 2,
+        "accuracy": 0.5,
+        "recentResults": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:10:39.021Z"
+      },
+      "break_pattern_md5": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "fibonacci": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "resistance_support": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "wave": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "golden_ratio": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "day_gay": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "day_gay_md5": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_44": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_55": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_212": {
+        "total": 2,
+        "correct": 1,
+        "accuracy": 0.5,
+        "recentResults": [
+          1,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:09:19.249Z"
+      },
+      "cau_1221": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_2112": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_gap": {
+        "total": 9,
+        "correct": 7,
+        "accuracy": 0.7777777777777778,
+        "recentResults": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:11:49.252Z"
+      },
+      "cau_ziczac": {
+        "total": 2,
+        "correct": 1,
+        "accuracy": 0.5,
+        "recentResults": [
+          0,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:10:39.021Z"
+      },
+      "cau_doi": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_rong": {
+        "total": 3,
+        "correct": 3,
+        "accuracy": 1,
+        "recentResults": [
+          1,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:24:25.085Z"
+      },
+      "smart_bet": {
+        "total": 11,
+        "correct": 7,
+        "accuracy": 0.6363636363636364,
+        "recentResults": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.078Z"
+      },
+      "break_pattern_advanced": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "break_streak": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "alternating_break": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "double_pair_break": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "triple_pattern": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "tong_phan_tich": {
+        "total": 10,
+        "correct": 8,
+        "accuracy": 0.8,
+        "recentResults": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.078Z"
+      },
+      "xu_huong_manh": {
+        "total": 10,
+        "correct": 8,
+        "accuracy": 0.8,
+        "recentResults": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.078Z"
+      },
+      "dao_chieu": {
+        "total": 4,
+        "correct": 2,
+        "accuracy": 0.5,
+        "recentResults": [
+          1,
+          0,
+          0,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.078Z"
+      }
+    },
+    "totalPredictions": 52,
+    "correctPredictions": 36,
+    "patternWeights": {
+      "cau_bet": 1.4641000000000006,
+      "cau_dao_11": 3,
+      "cau_22": 1,
+      "cau_33": 1.4641000000000006,
+      "cau_121": 1,
+      "cau_123": 1,
+      "cau_321": 1,
+      "cau_nhay_coc": 1.3856832000000003,
+      "cau_nhip_nghieng": 2.500281987984002,
+      "cau_3van1": 1.08,
+      "cau_be_cau": 1,
+      "cau_chu_ky": 1,
+      "distribution": 1.9487171000000014,
+      "dice_pattern": 1,
+      "sum_trend": 1,
+      "edge_cases": 1,
+      "momentum": 1,
+      "cau_tu_nhien": 1,
+      "dice_trend_line": 1.3604889600000003,
+      "dice_trend_line_md5": 1,
+      "break_pattern_hu": 1,
+      "break_pattern_md5": 1,
+      "fibonacci": 1,
+      "resistance_support": 1,
+      "wave": 1,
+      "golden_ratio": 1,
+      "day_gay": 1,
+      "day_gay_md5": 1,
+      "cau_44": 1,
+      "cau_55": 1,
+      "cau_212": 1,
+      "cau_1221": 1,
+      "cau_2112": 1,
+      "cau_gap": 1.4693280768000003,
+      "cau_ziczac": 1,
+      "cau_doi": 1,
+      "cau_rong": 1,
+      "smart_bet": 1.2100000000000002,
+      "break_pattern_advanced": 1,
+      "break_streak": 1,
+      "alternating_break": 1,
+      "double_pair_break": 1,
+      "triple_pattern": 1,
+      "tong_phan_tich": null,
+      "xu_huong_manh": null
+    },
+    "lastUpdate": "2026-04-15T20:29:25.078Z",
+    "streakAnalysis": {
+      "wins": 33,
+      "losses": 14,
+      "currentStreak": 5,
+      "bestStreak": 17,
+      "worstStreak": -5
+    },
+    "recentAccuracy": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "reversalState": {
+      "active": false,
+      "streakTrigger": 0
+    },
+    "markovMatrix": {
+      "TT": 0.2980769230769231,
+      "TX": 0.2692307692307692,
+      "XT": 0.25961538461538464,
+      "XX": 0.17307692307692307
+    },
+    "markov2Matrix": {
+      "TàiTàiXỉu": 17,
+      "TàiXỉuXỉu": 10,
+      "XỉuXỉuXỉu": 8,
+      "XỉuXỉuTài": 10,
+      "XỉuTàiXỉu": 11,
+      "TàiXỉuTài": 17,
+      "XỉuTàiTài": 16,
+      "TàiTàiTài": 14
+    },
+    "volatility": 3.473684210526316,
+    "adaptiveThresholds": {}
+  },
+  "md5": {
+    "predictions": [
+      {
+        "phien": "6880032",
+        "prediction": "Tài",
+        "confidence": 78,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Hỗ trợ 8 → Tài",
+          "Cầu 1-2-1",
+          "Cầu Nhảy Cóc Đảo"
+        ],
+        "timestamp": "2026-06-09T12:29:36.550Z",
+        "verified": false,
+        "actual": null,
+        "isCorrect": null
+      },
+      {
+        "phien": "6880031",
+        "prediction": "Xỉu",
+        "confidence": 74,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Cầu 2-2 (4 cặp)"
+        ],
+        "timestamp": "2026-06-09T12:28:36.666Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6880030",
+        "prediction": "Xỉu",
+        "confidence": 76,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Cầu 1-2-1",
+          "Cầu Nhảy Cóc Đảo"
+        ],
+        "timestamp": "2026-06-09T12:28:06.425Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6880030",
+        "prediction": "Xỉu",
+        "confidence": 76,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Cầu 1-2-1",
+          "Cầu Nhảy Cóc Đảo"
+        ],
+        "timestamp": "2026-06-09T12:28:02.143Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6880029",
+        "prediction": "Tài",
+        "confidence": 84,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Hỗ trợ 7 → Tài",
+          "Cầu 2-2 (3 cặp)"
+        ],
+        "timestamp": "2026-06-09T12:27:30.196Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6880029",
+        "prediction": "Tài",
+        "confidence": 84,
+        "patterns": [
+          "Sóng Elliott 5 (Impulse)",
+          "Hỗ trợ 7 → Tài",
+          "Cầu 2-2 (3 cặp)"
+        ],
+        "timestamp": "2026-06-09T12:27:12.219Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786995",
+        "prediction": "Xỉu",
+        "confidence": 86,
+        "patterns": [
+          "Cầu 3 Ván 1 (3T-1X) → Xỉu"
+        ],
+        "timestamp": "2026-04-15T20:29:25.292Z",
+        "verified": false,
+        "actual": null,
+        "isCorrect": null
+      },
+      {
+        "phien": "6786994",
+        "prediction": "Tài",
+        "confidence": 78,
+        "patterns": [
+          "Tổng Phân Tích (Tổng giảm 1.8 → Tài)",
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:28:55.273Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786993",
+        "prediction": "Tài",
+        "confidence": 86,
+        "patterns": [
+          "Cầu 3 Ván 1 (3X-1T) → Tài"
+        ],
+        "timestamp": "2026-04-15T20:27:55.303Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786992",
+        "prediction": "Tài",
+        "confidence": 80,
+        "patterns": [
+          "Cầu 1-2-1"
+        ],
+        "timestamp": "2026-04-15T20:26:55.134Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786991",
+        "prediction": "Tài",
+        "confidence": 86,
+        "patterns": [
+          "Cầu 3 Ván 1 (3X-1T) → Tài"
+        ],
+        "timestamp": "2026-04-15T20:26:25.129Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786990",
+        "prediction": "Xỉu",
+        "confidence": 75,
+        "patterns": [
+          "Tổng Phân Tích (Tổng tăng 1.6 → Xỉu)",
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:25:25.322Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786989",
+        "prediction": "Xỉu",
+        "confidence": 83,
+        "patterns": [
+          "Cầu 3 Ván 1 (3T-1X) → Xỉu"
+        ],
+        "timestamp": "2026-04-15T20:24:25.263Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786988",
+        "prediction": "Xỉu",
+        "confidence": 82,
+        "patterns": [
+          "Tổng Phân Tích (Tổng tăng 1.8 → Xỉu)",
+          "Cầu 1-2-1"
+        ],
+        "timestamp": "2026-04-15T20:23:55.244Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786987",
+        "prediction": "Xỉu",
+        "confidence": 88,
+        "patterns": [
+          "Tổng Phân Tích (Tổng tăng 1.6 → Xỉu)",
+          "Cầu 3 Ván 1 (3T-1X) → Xỉu"
+        ],
+        "timestamp": "2026-04-15T20:22:55.187Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786986",
+        "prediction": "Xỉu",
+        "confidence": 85,
+        "patterns": [
+          "Tổng Phân Tích (Tổng tăng 2.6 → Xỉu)",
+          "Đảo Chiều (Chuỗi Tài-Xỉu-Tài-Xỉu-Tài → Xỉu)",
+          "Cầu Đảo 1-1 (6 phiên)",
+          "Cầu Nhảy Cóc"
+        ],
+        "timestamp": "2026-04-15T20:21:55.231Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786985",
+        "prediction": "Tài",
+        "confidence": 87,
+        "patterns": [
+          "Xu Hướng Mạnh (6/8 Xỉu → Đảo Tài)",
+          "Đảo Chiều (Chuỗi Xỉu-Tài-Xỉu-Tài-Xỉu → Tài)",
+          "Cầu Đảo 1-1 (5 phiên)",
+          "Cầu Nhảy Cóc"
+        ],
+        "timestamp": "2026-04-15T20:21:25.197Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786984",
+        "prediction": "Xỉu",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)"
+        ],
+        "timestamp": "2026-04-15T20:20:25.067Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786983",
+        "prediction": "Tài",
+        "confidence": 84,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 4 về Xỉu → Tài)",
+          "Cầu Nhịp Nghiêng (4/5 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T) → Tài",
+          "Cầu Nhảy Cóc"
+        ],
+        "timestamp": "2026-04-15T20:19:25.185Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786982",
+        "prediction": "Tài",
+        "confidence": 86,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 4 về Xỉu → Tài)",
+          "Cầu Nhịp Nghiêng (4/5 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T) → Tài"
+        ],
+        "timestamp": "2026-04-15T20:18:25.166Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786981",
+        "prediction": "Xỉu",
+        "confidence": 70,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 6 về Xỉu → Tài)",
+          "Xu Hướng Mạnh (6/8 Xỉu → Đảo Tài)",
+          "Xu Hướng Cực (2T-8X) → Đảo",
+          "Cầu Bệt 4 phiên Xỉu",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhịp Nghiêng (4/5 Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:17:55.185Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786980",
+        "prediction": "Tài",
+        "confidence": 83,
+        "patterns": [
+          "Tổng Phân Tích (Lệch 4 về Xỉu → Tài)",
+          "Xu Hướng Mạnh (6/8 Xỉu → Đảo Tài)",
+          "Cầu Bệt 3 phiên Xỉu",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu 1-2-3",
+          "Cầu 3 Ván 1 (3X-1T) → Tài"
+        ],
+        "timestamp": "2026-04-15T20:16:55.148Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786979",
+        "prediction": "Xỉu",
+        "confidence": 65,
+        "patterns": [
+          "Xu Hướng Mạnh (6/8 Xỉu → Đảo Tài)"
+        ],
+        "timestamp": "2026-04-15T20:15:55.127Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786978",
+        "prediction": "Tài",
+        "confidence": 80,
+        "patterns": [
+          "Tổng Phân Tích (Tổng giảm 1.6 → Tài)",
+          "Cầu 1-2-1",
+          "Cầu 3-2-1"
+        ],
+        "timestamp": "2026-04-15T20:15:25.108Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786977",
+        "prediction": "Tài",
+        "confidence": 77,
+        "patterns": [
+          "Cầu Tự Nhiên (Theo Ván Trước)"
+        ],
+        "timestamp": "2026-04-15T20:14:25.067Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786976",
+        "prediction": "Xỉu",
+        "confidence": 89,
+        "patterns": [
+          "Cầu Nhịp Nghiêng 5 (4 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "MD5 Biểu Đồ (Tổng tăng liên tục → Bẻ)",
+          "Gần Kháng Cự (11 → 13)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:13:19.527Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786975",
+        "prediction": "Xỉu",
+        "confidence": 81,
+        "patterns": [
+          "Cầu Bệt 4 phiên",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhịp Nghiêng 5 (4 Xỉu)",
+          "Cầu 4-4 (1 bộ bốn)",
+          "Cầu Gấp 3 (mỗi 3 phiên)",
+          "Cầu Đôi Bệt (4 cặp)",
+          "MD5 Biểu Đồ (2 lên 1 xuống → Xỉu)",
+          "MD5 Cầu 1-1-1-1 (Bẻ → Tài)",
+          "Fibonacci (1T-6X → Bẻ Tài)",
+          "Gần Hỗ Trợ (9 → 7)",
+          "Sóng Thu Hẹp (4-2-2-1 → Theo Xỉu)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:12:49.689Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786974",
+        "prediction": "Xỉu",
+        "confidence": 83,
+        "patterns": [
+          "Cầu Bệt 3 phiên",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu 1-2-3",
+          "Cầu Nhịp Nghiêng 7 (5 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Biến động ngắn hạn mạnh",
+          "Gần Hỗ Trợ (8 → 7)",
+          "Sóng Thu Hẹp (3-2-2-1 → Theo Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:11:49.453Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786973",
+        "prediction": "Tài",
+        "confidence": 88,
+        "patterns": [
+          "Cầu 2-2 (3 cặp)",
+          "Cầu 2-1-1-2",
+          "Cầu Đôi Đảo (3 cặp)",
+          "MD5 Biểu Đồ (1 lên 2 xuống → Tài)",
+          "Momentum Đảo Chiều (+5 → Xỉu)",
+          "Gần Hỗ Trợ (9 → 7)",
+          "Sóng Thu Hẹp (2-2-2-1 → Theo Xỉu)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:10:49.486Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786972",
+        "prediction": "Xỉu",
+        "confidence": 80,
+        "patterns": [
+          "Cầu 1-2-1",
+          "Cầu 1-2-1-2-1",
+          "Cầu Gấp 3 (mỗi 3 phiên)",
+          "MD5 Biểu Đồ (2 dây xuống → Bẻ Tài)",
+          "Momentum Đảo Chiều (-5 → Tài)",
+          "Gần Hỗ Trợ (9 → 7)",
+          "Fibonacci Cực (5/7 → Bẻ Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:10:19.459Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786971",
+        "prediction": "Xỉu",
+        "confidence": 83,
+        "patterns": [
+          "Cầu 2-2 (2 cặp)",
+          "Cầu Đôi Đảo (2 cặp)",
+          "Gần Kháng Cự (14 → 15)",
+          "Sóng Thu Hẹp (2-2-1-1 → Theo Tài)"
+        ],
+        "timestamp": "2026-04-15T20:09:19.469Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786970",
+        "prediction": "Xỉu",
+        "confidence": 88,
+        "patterns": [
+          "Cầu 1-2-1",
+          "MD5 Biểu Đồ (Tổng tăng liên tục → Bẻ)",
+          "Gần Kháng Cự (14 → 15)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:08:19.541Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786969",
+        "prediction": "Xỉu",
+        "confidence": 90,
+        "patterns": [
+          "Cầu Nhịp Nghiêng 7 (5 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Momentum Đảo Chiều (+6 → Xỉu)",
+          "Sóng Thu Hẹp (2-1-1-1 → Theo Xỉu)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:07:49.410Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786968",
+        "prediction": "Tài",
+        "confidence": 91,
+        "patterns": [
+          "Cầu Đảo 1-1 (5 phiên)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 7 (5 Xỉu)",
+          "Cầu Ziczac (3 lần)",
+          "MD5 Biểu Đồ (1 lên 2 xuống → Tài)",
+          "MD5 Cầu 1-2-1-2 (Theo → Xỉu)",
+          "Momentum Đảo Chiều (-10 → Tài)",
+          "Gần Hỗ Trợ (8 → 7)"
+        ],
+        "timestamp": "2026-04-15T20:06:49.386Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786967",
+        "prediction": "Xỉu",
+        "confidence": 95,
+        "patterns": [
+          "Cầu Đảo 1-1 (4 phiên)",
+          "Cầu 2-1-2 Đảo",
+          "MD5 Biểu Đồ (2 lên 1 xuống → Xỉu)",
+          "MD5 Cầu 1-2-1-2 (Theo → Tài)",
+          "Momentum Đảo Chiều (+12 → Xỉu)",
+          "Sóng Mở Rộng (1-1-1-3 → Bẻ Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:05:49.388Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786966",
+        "prediction": "Tài",
+        "confidence": 88,
+        "patterns": [
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Cầu Gấp 4 (mỗi 4 phiên)",
+          "Cầu 1-1-2-2-1 (Bẻ → Tài)",
+          "MD5 Biểu Đồ (2 dây xuống → Bẻ Tài)",
+          "Momentum Đảo Chiều (-10 → Tài)",
+          "Hỗ Trợ (Tổng 6 ≤ 7 → Tài)"
+        ],
+        "timestamp": "2026-04-15T20:05:19.523Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786965",
+        "prediction": "Xỉu",
+        "confidence": 84,
+        "patterns": [
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Cầu 1-2-2-1",
+          "MD5 Biểu Đồ (2 lên 1 xuống → Xỉu)",
+          "Momentum Đảo Chiều (+5 → Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:04:19.385Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786964",
+        "prediction": "Tài",
+        "confidence": 86,
+        "patterns": [
+          "Cầu Bệt 3 phiên",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu 1-2-3",
+          "Cầu Nhịp Nghiêng 7 (5 Xỉu)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "MD5 Biểu Đồ (2 xúc xắc thấp 2-2 → Tài)",
+          "Biến động ngắn hạn mạnh",
+          "Hỗ Trợ (Tổng 8 ≤ 8 → Tài)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:03:19.356Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786963",
+        "prediction": "Tài",
+        "confidence": 94,
+        "patterns": [
+          "Cầu 2-2 (3 cặp)",
+          "Cầu Nhịp Nghiêng 7 (5 Xỉu)",
+          "Cầu 2-1-1-2",
+          "Cầu Đôi Đảo (3 cặp)",
+          "MD5 Biểu Đồ (1 lên 2 xuống → Tài)",
+          "Gần Hỗ Trợ (9 → 8)",
+          "Sóng Mở Rộng (2-2-3-3 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T20:02:19.425Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786962",
+        "prediction": "Tài",
+        "confidence": 85,
+        "patterns": [
+          "Cầu 1-2-1",
+          "Cầu 3-2-1",
+          "MD5 Biểu Đồ (1 lên 2 xuống → Tài)",
+          "Gần Hỗ Trợ (9 → 8)",
+          "Sóng Mở Rộng (1-2-3-3 → Bẻ Tài)",
+          "Fibonacci Cực (5/7 → Bẻ Xỉu)"
+        ],
+        "timestamp": "2026-04-15T20:01:49.315Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786961",
+        "prediction": "Xỉu",
+        "confidence": 82,
+        "patterns": [
+          "Cầu 2-2 (2 cặp)",
+          "Cầu 2-1-2",
+          "Cầu Đôi Đảo (2 cặp)",
+          "MD5 Biểu Đồ (Tổng tăng liên tục → Bẻ)"
+        ],
+        "timestamp": "2026-04-15T20:00:49.211Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786960",
+        "prediction": "Tài",
+        "confidence": 88,
+        "patterns": [
+          "Cầu 3 Ván 1 (3X-1T)",
+          "Cầu 1-2-2-1",
+          "Cầu Gấp 4 (mỗi 4 phiên)",
+          "MD5 Biểu Đồ (Tổng tăng liên tục → Bẻ)",
+          "Fibonacci Cực (5/7 → Bẻ Tài)"
+        ],
+        "timestamp": "2026-04-15T19:59:49.257Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786959",
+        "prediction": "Xỉu",
+        "confidence": 79,
+        "patterns": [
+          "Cầu Bệt 3 phiên",
+          "Cầu 3-3 (2 bộ ba)",
+          "Cầu 3 Ván 1 (3X-1T)",
+          "MD5 Biểu Đồ (Tổng tăng liên tục → Bẻ)",
+          "Biến động ngắn hạn mạnh"
+        ],
+        "timestamp": "2026-04-15T19:59:19.257Z",
+        "verified": true,
+        "actual": "Tài",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786958",
+        "prediction": "Xỉu",
+        "confidence": 85,
+        "patterns": [
+          "Cầu 2-2 (2 cặp)",
+          "Cầu 2-1-2",
+          "Cầu Đôi Đảo (2 cặp)",
+          "MD5 Biểu Đồ (1 lên 2 xuống → Tài)",
+          "Momentum Đảo Chiều (+6 → Xỉu)"
+        ],
+        "timestamp": "2026-04-15T19:58:19.274Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      },
+      {
+        "phien": "6786957",
+        "prediction": "Tài",
+        "confidence": 83,
+        "patterns": [
+          "Cầu Nhảy Cóc Đảo",
+          "Cầu Nhịp Nghiêng 7 (5 Tài)",
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Cầu Gấp 4 (mỗi 4 phiên)",
+          "MD5 Biểu Đồ (Tổng giảm liên tục → Bẻ)",
+          "Fibonacci Cực (5/7 → Bẻ Xỉu)"
+        ],
+        "timestamp": "2026-04-15T19:57:19.253Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": false
+      },
+      {
+        "phien": "6786956",
+        "prediction": "Xỉu",
+        "confidence": 83,
+        "patterns": [
+          "Cầu Bệt 3 phiên",
+          "Cầu 3-3 (1 bộ ba)",
+          "Cầu Nhảy Cóc",
+          "Cầu Nhịp Nghiêng 5 (4 Tài)",
+          "Cầu 3 Ván 1 (3T-1X)",
+          "Cầu 2-2-1-1 (Theo → Xỉu)",
+          "MD5 Biểu Đồ (2 dây xuống → Bẻ Tài)",
+          "Biến động ngắn hạn mạnh",
+          "Momentum Đảo Chiều (-10 → Tài)",
+          "Fibonacci Cực (5/7 → Bẻ Xỉu)"
+        ],
+        "timestamp": "2026-04-15T19:56:24.367Z",
+        "verified": true,
+        "actual": "Xỉu",
+        "isCorrect": true
+      }
+    ],
+    "patternStats": {
+      "cau_bet": {
+        "total": 7,
+        "correct": 3,
+        "accuracy": 0.42857142857142855,
+        "recentResults": [
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:18:25.165Z"
+      },
+      "cau_dao_11": {
+        "total": 7,
+        "correct": 5,
+        "accuracy": 0.7142857142857143,
+        "recentResults": [
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.291Z"
+      },
+      "cau_22": {
+        "total": 6,
+        "correct": 4,
+        "accuracy": 0.6666666666666666,
+        "recentResults": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:11:49.451Z"
+      },
+      "cau_33": {
+        "total": 7,
+        "correct": 3,
+        "accuracy": 0.42857142857142855,
+        "recentResults": [
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:18:25.165Z"
+      },
+      "cau_121": {
+        "total": 9,
+        "correct": 3,
+        "accuracy": 0.3333333333333333,
+        "recentResults": [
+          0,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:27:55.300Z"
+      },
+      "cau_123": {
+        "total": 3,
+        "correct": 2,
+        "accuracy": 0.6666666666666666,
+        "recentResults": [
+          1,
+          1,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:17:55.183Z"
+      },
+      "cau_321": {
+        "total": 2,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:15:55.125Z"
+      },
+      "cau_nhay_coc": {
+        "total": 7,
+        "correct": 4,
+        "accuracy": 0.5714285714285714,
+        "recentResults": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:22:55.186Z"
+      },
+      "cau_nhip_nghieng": {
+        "total": 13,
+        "correct": 5,
+        "accuracy": 0.38461538461538464,
+        "recentResults": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:20:25.065Z"
+      },
+      "cau_3van1": {
+        "total": 17,
+        "correct": 11,
+        "accuracy": 0.6470588235294118,
+        "recentResults": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:28:55.272Z"
+      },
+      "cau_be_cau": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_chu_ky": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "distribution": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "dice_pattern": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "sum_trend": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "edge_cases": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "momentum": {
+        "total": 4,
+        "correct": 3,
+        "accuracy": 0.75,
+        "recentResults": [
+          1,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:12:49.687Z"
+      },
+      "cau_tu_nhien": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:15:25.106Z"
+      },
+      "dice_trend_line": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "dice_trend_line_md5": {
+        "total": 18,
+        "correct": 9,
+        "accuracy": 0.5,
+        "recentResults": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:14:25.065Z"
+      },
+      "break_pattern_hu": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "break_pattern_md5": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:13:19.526Z"
+      },
+      "fibonacci": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "resistance_support": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "wave": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "golden_ratio": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "day_gay": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "day_gay_md5": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_44": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:13:19.526Z"
+      },
+      "cau_55": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "cau_212": {
+        "total": 3,
+        "correct": 3,
+        "accuracy": 1,
+        "recentResults": [
+          1,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:06:49.384Z"
+      },
+      "cau_1221": {
+        "total": 2,
+        "correct": 2,
+        "accuracy": 1,
+        "recentResults": [
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:05:19.520Z"
+      },
+      "cau_2112": {
+        "total": 2,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:11:49.451Z"
+      },
+      "cau_gap": {
+        "total": 5,
+        "correct": 3,
+        "accuracy": 0.6,
+        "recentResults": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:13:19.526Z"
+      },
+      "cau_ziczac": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:07:49.407Z"
+      },
+      "cau_doi": {
+        "total": 6,
+        "correct": 3,
+        "accuracy": 0.5,
+        "recentResults": [
+          1,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:13:19.526Z"
+      },
+      "cau_rong": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "smart_bet": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0,
+        "recentResults": [
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:18:25.165Z"
+      },
+      "break_pattern_advanced": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "break_streak": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "alternating_break": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "double_pair_break": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "triple_pattern": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0.5,
+        "recentResults": [],
+        "lastAdjustment": null
+      },
+      "tong_phan_tich": {
+        "total": 10,
+        "correct": 4,
+        "accuracy": 0.4,
+        "recentResults": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:29:25.291Z"
+      },
+      "xu_huong_manh": {
+        "total": 4,
+        "correct": 2,
+        "accuracy": 0.5,
+        "recentResults": [
+          1,
+          0,
+          0,
+          1
+        ],
+        "lastAdjustment": "2026-04-15T20:21:55.228Z"
+      },
+      "dao_chieu": {
+        "total": 2,
+        "correct": 1,
+        "accuracy": 0.5,
+        "recentResults": [
+          1,
+          0
+        ],
+        "lastAdjustment": "2026-04-15T20:22:55.186Z"
+      }
+    },
+    "totalPredictions": 46,
+    "correctPredictions": 24,
+    "patternWeights": {
+      "cau_bet": 1,
+      "cau_dao_11": 1.2100000000000002,
+      "cau_22": 1.1664,
+      "cau_33": 1,
+      "cau_121": 0.9,
+      "cau_123": 1,
+      "cau_321": 1,
+      "cau_nhay_coc": 1.1,
+      "cau_nhip_nghieng": 0.9,
+      "cau_3van1": 1.3604889600000003,
+      "cau_be_cau": 1,
+      "cau_chu_ky": 1,
+      "distribution": 1,
+      "dice_pattern": 1,
+      "sum_trend": 1,
+      "edge_cases": 1,
+      "momentum": 1,
+      "cau_tu_nhien": 1,
+      "dice_trend_line": 1,
+      "dice_trend_line_md5": 1.3604889600000003,
+      "break_pattern_hu": 1,
+      "break_pattern_md5": 1,
+      "fibonacci": 1,
+      "resistance_support": 1,
+      "wave": 1,
+      "golden_ratio": 1,
+      "day_gay": 1,
+      "day_gay_md5": 1,
+      "cau_44": 1,
+      "cau_55": 1,
+      "cau_212": 1,
+      "cau_1221": 1,
+      "cau_2112": 1,
+      "cau_gap": 1,
+      "cau_ziczac": 1,
+      "cau_doi": 1,
+      "cau_rong": 1,
+      "smart_bet": 1,
+      "break_pattern_advanced": 1,
+      "break_streak": 1,
+      "alternating_break": 1,
+      "double_pair_break": 1,
+      "triple_pattern": 1,
+      "tong_phan_tich": null
+    },
+    "lastUpdate": "2026-04-15T20:29:25.291Z",
+    "streakAnalysis": {
+      "wins": 21,
+      "losses": 18,
+      "currentStreak": 1,
+      "bestStreak": 4,
+      "worstStreak": -4
+    },
+    "recentAccuracy": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1
+    ],
+    "reversalState": {
+      "active": false,
+      "streakTrigger": 0
+    },
+    "markovMatrix": {
+      "TT": 0.2692307692307692,
+      "TX": 0.2403846153846154,
+      "XT": 0.25,
+      "XX": 0.2403846153846154
+    },
+    "markov2Matrix": {
+      "XỉuTàiTài": 17,
+      "TàiTàiXỉu": 17,
+      "TàiXỉuXỉu": 11,
+      "XỉuXỉuTài": 11,
+      "XỉuXỉuXỉu": 14,
+      "XỉuTàiXỉu": 8,
+      "TàiXỉuTài": 14,
+      "TàiTàiTài": 11
+    },
+    "volatility": 3.1578947368421053,
+    "adaptiveThresholds": {}
+  }
+}
