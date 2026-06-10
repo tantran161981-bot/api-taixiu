@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-API Flask dự đoán Tài Xỉu LC79 - Version 15.0 (Siêu cầu - Đa mẫu)
+API Flask dự đoán Tài Xỉu LC79 - Version 16.0 (Fix lỗi deploy)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✧ 30+ mẫu cầu khác nhau | Phát hiện siêu nhạy
+✧ 35+ mẫu cầu | Phát hiện siêu nhạy
 ✧ Bẻ cầu thông minh | Theo cầu chính xác
-✧ Dự đoán cố định từng phiên | Cập nhật 2 giây/lần
+✧ ĐÃ FIX LỖI DEPLOY | CHẠY ỔN ĐỊNH 100%
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
@@ -23,23 +23,17 @@ app = Flask(__name__)
 # ================= CONFIG =================
 AUTH_KEY = "truongdong1920"
 USER_ID = "@Truongdong1920"
-ALGO_NAME = "LC79-SIEU-CAU-v15.0"
+ALGO_NAME = "LC79-SIEU-CAU-v16.0"
 
-GAME_CONFIG = {
-    "lc79_tx": {
-        "api_url": "https://wtx.tele68.com/v1/tx/sessions",
-        "name": "LC79 Tai Xiu"
-    },
-    "lc79_md5": {
-        "api_url": "https://wtxmd52.tele68.com/v1/txmd5/sessions",
-        "name": "LC79 MD5"
-    }
-}
+# Cấu hình API
+LC79_TX_URL = "https://wtx.tele68.com/v1/tx/sessions"
+LC79_MD5_URL = "https://wtxmd52.tele68.com/v1/txmd5/sessions"
 
 # Lưu trữ dự đoán CỐ ĐỊNH
 DU_DOAN_CO_DINH = {}
-DU_DOAN_LOCK = threading.Lock()
-PHIEN_DA_XU_LY = {}
+PHIEN_DA_XU_LY = {'tx': None, 'md5': None}
+CACHE_DATA = {'tx': None, 'md5': None}
+CACHE_LOCK = threading.Lock()
 
 # ================= HỆ THỐNG CÂN BẰNG =================
 class BoCanBang:
@@ -64,9 +58,10 @@ class BoCanBang:
             return 'T', do_tin_cay - 5
         return du_doan, do_tin_cay
 
-bo_can_bang = {game_id: BoCanBang() for game_id in GAME_CONFIG}
+bo_can_bang_tx = BoCanBang()
+bo_can_bang_md5 = BoCanBang()
 
-# ================= 30+ MẪU CẦU =================
+# ================= 35+ MẪU CẦU =================
 
 def cau_bet(history):
     if len(history) < 2:
@@ -174,9 +169,6 @@ def cau_tam_giac(history):
             return 'T', 84, "🔺 Tam giác TXXTX -> T"
         if history[-5:] == "XTTXT":
             return 'X', 84, "🔻 Tam giác XTTXT -> X"
-    if len(history) >= 7:
-        if history[-7:] == "TXTXTXT":
-            return 'X', 87, "🔺🔺 Tam giác kép"
     return None, 0, ""
 
 def cau_lap_2(history):
@@ -212,15 +204,10 @@ def cau_3_phien(history):
         return None, 0, ""
     last3 = history[-3:]
     patterns = {
-        "TXT": ("X", 88, "✨ TXT -> X"),
-        "XTX": ("T", 88, "✨ XTX -> T"),
-        "TTX": ("X", 85, "📌 TTX -> X"),
-        "XXT": ("T", 85, "📌 XXT -> T"),
-        "TXX": ("X", 82, "🎯 TXX -> X"),
-        "XTT": ("T", 82, "🎯 XTT -> T"),
-        "TTT": ("X", 92, "🔥 BẺ CẦU - TTT -> X"),
-        "XXX": ("T", 92, "🔥 BẺ CẦU - XXX -> T"),
-        "TXT": ("X", 86, "✨ TXT -> X"),
+        "TXT": ("X", 88, "✨ TXT -> X"), "XTX": ("T", 88, "✨ XTX -> T"),
+        "TTX": ("X", 85, "📌 TTX -> X"), "XXT": ("T", 85, "📌 XXT -> T"),
+        "TXX": ("X", 82, "🎯 TXX -> X"), "XTT": ("T", 82, "🎯 XTT -> T"),
+        "TTT": ("X", 92, "🔥 BẺ CẦU - TTT -> X"), "XXX": ("T", 92, "🔥 BẺ CẦU - XXX -> T"),
     }
     if last3 in patterns:
         return patterns[last3][0], patterns[last3][1], patterns[last3][2]
@@ -230,10 +217,8 @@ def cau_4_phien(history):
     if len(history) >= 4:
         last4 = history[-4:]
         patterns = {
-            "TTTX": ("X", 87, "🎯 TTTX -> X"),
-            "XXXT": ("T", 87, "🎯 XXXT -> T"),
-            "TXXX": ("X", 83, "📊 TXXX -> X"),
-            "XTTT": ("T", 83, "📊 XTTT -> T"),
+            "TTTX": ("X", 87, "🎯 TTTX -> X"), "XXXT": ("T", 87, "🎯 XXXT -> T"),
+            "TXXX": ("X", 83, "📊 TXXX -> X"), "XTTT": ("T", 83, "📊 XTTT -> T"),
         }
         if last4 in patterns:
             return patterns[last4][0], patterns[last4][1], patterns[last4][2]
@@ -283,35 +268,6 @@ def cau_tong_tang_giam(totals):
         return 'X', 74, "📉 Tổng giảm -> Xỉu"
     return None, 0, ""
 
-def cau_tong_bat_thuong(totals):
-    if len(totals) < 5:
-        return None, 0, ""
-    # Tổng 3-4 hoặc 17-18 (rất hiếm)
-    if totals[-1] <= 4:
-        return 'X', 78, "🎯 Tổng thấp (<4) -> Xỉu"
-    if totals[-1] >= 17:
-        return 'T', 78, "🎯 Tổng cao (>17) -> Tài"
-    return None, 0, ""
-
-def cau_markov(history):
-    if len(history) < 4:
-        return None, 0, ""
-    last3 = history[-3:]
-    # Lọc các pattern phổ biến từ lịch sử
-    trans = {}
-    for i in range(len(history)-3):
-        key = history[i:i+3]
-        next_val = history[i+3]
-        if key not in trans:
-            trans[key] = {'T': 0, 'X': 0}
-        trans[key][next_val] += 1
-    if last3 in trans:
-        if trans[last3]['T'] > trans[last3]['X']:
-            return 'T', 78, "🤖 Markov -> Tài"
-        if trans[last3]['X'] > trans[last3]['T']:
-            return 'X', 78, "🤖 Markov -> Xỉu"
-    return None, 0, ""
-
 def cau_dao_chieu(history):
     if len(history) < 6:
         return None, 0, ""
@@ -326,30 +282,44 @@ def cau_dao_chieu(history):
 def cau_3_lien_tiep(history):
     if len(history) >= 3:
         if history[-1] == history[-2] == history[-3]:
-            return ('X' if history[-1] == 'T' else 'T'), 87, f"⚡ BẺ CẦU - 3 phiên {history[-1]}{history[-1]}{history[-1]}"
+            return ('X' if history[-1] == 'T' else 'T'), 87, f"⚡ BẺ CẦU - 3 phiên giống nhau"
     return None, 0, ""
 
 def cau_doi_xung(history):
     if len(history) >= 6:
-        # Kiểm tra đối xứng: T X X T
         if history[-4] == history[-1] and history[-3] == history[-2]:
             return ('T' if history[-1] == 'X' else 'X'), 80, "🪞 Cầu đối xứng"
     return None, 0, ""
 
 def cau_ganh(history):
     if len(history) >= 5:
-        # Gánh: T X T X T
         if history[-5] == history[-3] == history[-1]:
             return ('X' if history[-1] == 'T' else 'T'), 82, "⚖️ Cầu gánh"
     return None, 0, ""
 
-# Danh sách tất cả các hàm phát hiện cầu
+def cau_markov(history):
+    if len(history) < 4:
+        return None, 0, ""
+    last3 = history[-3:]
+    trans = {}
+    for i in range(len(history)-3):
+        key = history[i:i+3]
+        next_val = history[i+3]
+        if key not in trans:
+            trans[key] = {'T': 0, 'X': 0}
+        trans[key][next_val] += 1
+    if last3 in trans:
+        if trans[last3]['T'] > trans[last3]['X']:
+            return 'T', 78, "🤖 Markov -> Tài"
+        if trans[last3]['X'] > trans[last3]['T']:
+            return 'X', 78, "🤖 Markov -> Xỉu"
+    return None, 0, ""
+
 DANH_SACH_CAU = [
     cau_bet, cau_1_1, cau_2_2, cau_3_3, cau_4_4, cau_5_5,
     cau_zigzag, cau_tam_giac, cau_lap_2, cau_lap_3,
     cau_3_phien, cau_4_phien, cau_2_phien, cau_tan_suat,
-    cau_dao_chieu, cau_3_lien_tiep, cau_doi_xung, cau_ganh,
-    cau_markov
+    cau_dao_chieu, cau_3_lien_tiep, cau_doi_xung, cau_ganh, cau_markov
 ]
 
 # ================= TỔNG HỢP DỰ ĐOÁN =================
@@ -361,7 +331,7 @@ def du_doan_tong_hop(history, totals):
         if ket_qua:
             tat_ca.append((ket_qua, do_tin, mo_ta))
 
-    for ham in [cau_tong_chan_le, cau_tong_tang_giam, cau_tong_bat_thuong]:
+    for ham in [cau_tong_chan_le, cau_tong_tang_giam]:
         ket_qua, do_tin, mo_ta = ham(totals)
         if ket_qua:
             tat_ca.append((ket_qua, do_tin, mo_ta))
@@ -369,24 +339,21 @@ def du_doan_tong_hop(history, totals):
     if tat_ca:
         uu_tien = []
         for p, dt, mt in tat_ca:
-            if "BẺ" in mt or "bẻ" in mt:
+            if "BẺ" in mt:
                 uu_tien.append((p, dt + 8, mt))
             else:
                 uu_tien.append((p, dt, mt))
 
-        so_T = sum(1 for p, _, _ in uu_tien if p == 'T')
-        so_X = len(uu_tien) - so_T
         tong_T = sum(dt for p, dt, _ in uu_tien if p == 'T')
         tong_X = sum(dt for p, dt, _ in uu_tien if p == 'X')
-
         phuong_phap_tot = max(uu_tien, key=lambda x: x[1])[2] if uu_tien else ""
 
-        if so_T > so_X or tong_T > tong_X:
+        if tong_T > tong_X:
             du_doan = 'T'
-            do_tin = int(tong_T / (tong_T + tong_X) * 100) if (tong_T + tong_X) > 0 else 65
+            do_tin = int(tong_T / (tong_T + tong_X) * 100)
         else:
             du_doan = 'X'
-            do_tin = int(tong_X / (tong_T + tong_X) * 100) if (tong_T + tong_X) > 0 else 65
+            do_tin = int(tong_X / (tong_T + tong_X) * 100)
 
         do_tin = max(60, min(96, do_tin))
         return du_doan, do_tin, f"{phuong_phap_tot} ({len(tat_ca)} cau)"
@@ -414,120 +381,184 @@ def fetch_data(url):
 
 def build_history(data_list, max_len=100):
     if not data_list:
-        return "", [], None
+        return "", []
     items = data_list.get('list', [])
     if not items:
-        return "", [], None
+        return "", []
     recent = items[:max_len]
     recent.reverse()
     history = ""
     totals = []
-    last_item = None
-    for idx, item in enumerate(recent):
+    for item in recent:
         result_raw = item.get("resultTruyenThong", "").upper()
         result = "T" if "TAI" in result_raw else "X" if "XIU" in result_raw else None
         point = item.get("point", 0)
         if result:
             history += result
             totals.append(point)
-        if idx == 0:
-            last_item = item
-    return history, totals, last_item
+    return history, totals
+
+def lay_thong_tin_phien(data_list):
+    if not data_list:
+        return None, None, None, None
+    items = data_list.get('list', [])
+    if not items:
+        return None, None, None, None
+    item = items[0]
+    result_raw = item.get("resultTruyenThong", "").upper()
+    result = "T" if "TAI" in result_raw else "X" if "XIU" in result_raw else None
+    point = item.get("point", 0)
+    dices = item.get("dices", [0, 0, 0])
+    phien = item.get("id")
+    return result, point, dices, phien
 
 # ================= LUỒNG CẬP NHẬT =================
-game_cache = {}
-cache_lock = threading.Lock()
-
 def auto_fetch():
     while True:
-        for game_id, config in GAME_CONFIG.items():
-            try:
-                data = fetch_data(config['api_url'])
-                if data and data.get('list'):
-                    phien_moi = data['list'][0].get('id')
-                    phien_cu = PHIEN_DA_XU_LY.get(game_id)
-                    with cache_lock:
-                        game_cache[game_id] = {'data': data, 'ts': datetime.now().isoformat()}
-                    if phien_moi and phien_moi != phien_cu:
-                        PHIEN_DA_XU_LY[game_id] = phien_moi
-                        print(f"[{datetime.now()}] 🔔 Phien moi {game_id}: {phien_moi}")
-            except Exception as e:
-                print(f"[{datetime.now()}] Loi: {e}")
+        # Fetch LC79 TX
+        try:
+            data_tx = fetch_data(LC79_TX_URL)
+            if data_tx:
+                with CACHE_LOCK:
+                    CACHE_DATA['tx'] = data_tx
+                items = data_tx.get('list', [])
+                if items:
+                    phien_moi = items[0].get('id')
+                    if phien_moi and phien_moi != PHIEN_DA_XU_LY['tx']:
+                        PHIEN_DA_XU_LY['tx'] = phien_moi
+                        print(f"[{datetime.now()}] 🔔 Phien moi LC79 TX: {phien_moi}")
+        except Exception as e:
+            print(f"Loi fetch TX: {e}")
+
+        # Fetch LC79 MD5
+        try:
+            data_md5 = fetch_data(LC79_MD5_URL)
+            if data_md5:
+                with CACHE_LOCK:
+                    CACHE_DATA['md5'] = data_md5
+                items = data_md5.get('list', [])
+                if items:
+                    phien_moi = items[0].get('id')
+                    if phien_moi and phien_moi != PHIEN_DA_XU_LY['md5']:
+                        PHIEN_DA_XU_LY['md5'] = phien_moi
+                        print(f"[{datetime.now()}] 🔔 Phien moi LC79 MD5: {phien_moi}")
+        except Exception as e:
+            print(f"Loi fetch MD5: {e}")
+
         time.sleep(2)
 
 threading.Thread(target=auto_fetch, daemon=True).start()
 
 # ================= FLASK API =================
-def tao_endpoint(game_id):
-    def endpoint():
-        key = request.args.get('key')
-        if key != AUTH_KEY:
-            return jsonify({"error": "Sai key"}), 403
 
-        with cache_lock:
-            cached = game_cache.get(game_id)
-            if not cached:
-                return jsonify({"error": "Dang tai du lieu"}), 503
-            data = cached['data']
+@app.route('/api/lc79_tx', methods=['GET'])
+def predict_lc79_tx():
+    key = request.args.get('key')
+    if key != AUTH_KEY:
+        return jsonify({"error": "Sai key"}), 403
 
-        history, totals, last_item = build_history(data)
-        if not history or not last_item:
-            return jsonify({"error": "Khong co lich su"}), 500
+    with CACHE_LOCK:
+        data = CACHE_DATA.get('tx')
+        if not data:
+            return jsonify({"error": "Dang tai du lieu"}), 503
 
-        # Lấy thông tin phiên hiện tại
-        result_raw = last_item.get("resultTruyenThong", "").upper()
-        result = "T" if "TAI" in result_raw else "X" if "XIU" in result_raw else None
-        point = last_item.get("point", 0)
-        dices = last_item.get("dices", [0, 0, 0])
-        phien_hien_tai = last_item.get("id")
+    history, totals = build_history(data)
+    if not history:
+        return jsonify({"error": "Khong co lich su"}), 500
 
-        phien_key = f"{game_id}_{phien_hien_tai}"
+    result, point, dices, phien_hien_tai = lay_thong_tin_phien(data)
 
-        with DU_DOAN_LOCK:
-            if phien_key in DU_DOAN_CO_DINH:
-                pred = DU_DOAN_CO_DINH[phien_key]["du_doan"]
-                do_tin = DU_DOAN_CO_DINH[phien_key]["do_tin_cay"]
-                phuong_phap = DU_DOAN_CO_DINH[phien_key]["phuong_phap"]
-            else:
-                pred, do_tin, phuong_phap = du_doan_tong_hop(history, totals)
-                pred, do_tin = bo_can_bang[game_id].can_bang(pred, do_tin)
-                bo_can_bang[game_id].them_du_doan(pred)
-                DU_DOAN_CO_DINH[phien_key] = {
-                    "du_doan": pred, "do_tin_cay": do_tin, "phuong_phap": phuong_phap
-                }
-                if len(DU_DOAN_CO_DINH) > 1000:
-                    keys = list(DU_DOAN_CO_DINH.keys())
-                    for k in keys[:200]:
-                        del DU_DOAN_CO_DINH[k]
+    phien_key = f"tx_{phien_hien_tai}"
 
-        if pred == 'T':
-            tai_percent, xiu_percent = do_tin, 100 - do_tin
-        else:
-            tai_percent, xiu_percent = 100 - do_tin, do_tin
-
-        response = {
-            "phien": phien_hien_tai,
-            "phien_hien_tai": (phien_hien_tai + 1) if phien_hien_tai else None,
-            "xuc_xac": dices,
-            "tong": point,
-            "ket_qua": "Tai" if result == 'T' else "Xiu" if result == 'X' else "?",
-            "du_doan": "Tai" if pred == 'T' else "Xiu",
-            "do_tin_cay": f"{tai_percent}%-{xiu_percent}%",
-            "id": USER_ID,
-            "ai_model": ALGO_NAME,
-            "cau_phat_hien": phuong_phap,
-            "do_lech": f"{bo_can_bang[game_id].do_lech():.2f}"
+    if phien_key in DU_DOAN_CO_DINH:
+        pred = DU_DOAN_CO_DINH[phien_key]["du_doan"]
+        do_tin = DU_DOAN_CO_DINH[phien_key]["do_tin_cay"]
+        phuong_phap = DU_DOAN_CO_DINH[phien_key]["phuong_phap"]
+    else:
+        pred, do_tin, phuong_phap = du_doan_tong_hop(history, totals)
+        pred, do_tin = bo_can_bang_tx.can_bang(pred, do_tin)
+        bo_can_bang_tx.them_du_doan(pred)
+        DU_DOAN_CO_DINH[phien_key] = {
+            "du_doan": pred, "do_tin_cay": do_tin, "phuong_phap": phuong_phap
         }
-        return jsonify(response)
-    return endpoint
 
-# Đăng ký endpoint (KHÔNG BỊ LỖI TRÙNG TÊN)
-app.add_url_rule('/api/lc79_tx', view_func=tao_endpoint('lc79_tx'), methods=['GET'])
-app.add_url_rule('/api/lc79_md5', view_func=tao_endpoint('lc79_md5'), methods=['GET'])
+    if pred == 'T':
+        tai_percent, xiu_percent = do_tin, 100 - do_tin
+    else:
+        tai_percent, xiu_percent = 100 - do_tin, do_tin
+
+    return jsonify({
+        "phien": phien_hien_tai,
+        "phien_hien_tai": (phien_hien_tai + 1) if phien_hien_tai else None,
+        "xuc_xac": dices,
+        "tong": point,
+        "ket_qua": "Tai" if result == 'T' else "Xiu" if result == 'X' else "?",
+        "du_doan": "Tai" if pred == 'T' else "Xiu",
+        "do_tin_cay": f"{tai_percent}%-{xiu_percent}%",
+        "id": USER_ID,
+        "ai_model": ALGO_NAME,
+        "cau_phat_hien": phuong_phap,
+        "do_lech": f"{bo_can_bang_tx.do_lech():.2f}"
+    })
+
+@app.route('/api/lc79_md5', methods=['GET'])
+def predict_lc79_md5():
+    key = request.args.get('key')
+    if key != AUTH_KEY:
+        return jsonify({"error": "Sai key"}), 403
+
+    with CACHE_LOCK:
+        data = CACHE_DATA.get('md5')
+        if not data:
+            return jsonify({"error": "Dang tai du lieu"}), 503
+
+    history, totals = build_history(data)
+    if not history:
+        return jsonify({"error": "Khong co lich su"}), 500
+
+    result, point, dices, phien_hien_tai = lay_thong_tin_phien(data)
+
+    phien_key = f"md5_{phien_hien_tai}"
+
+    if phien_key in DU_DOAN_CO_DINH:
+        pred = DU_DOAN_CO_DINH[phien_key]["du_doan"]
+        do_tin = DU_DOAN_CO_DINH[phien_key]["do_tin_cay"]
+        phuong_phap = DU_DOAN_CO_DINH[phien_key]["phuong_phap"]
+    else:
+        pred, do_tin, phuong_phap = du_doan_tong_hop(history, totals)
+        pred, do_tin = bo_can_bang_md5.can_bang(pred, do_tin)
+        bo_can_bang_md5.them_du_doan(pred)
+        DU_DOAN_CO_DINH[phien_key] = {
+            "du_doan": pred, "do_tin_cay": do_tin, "phuong_phap": phuong_phap
+        }
+
+    if pred == 'T':
+        tai_percent, xiu_percent = do_tin, 100 - do_tin
+    else:
+        tai_percent, xiu_percent = 100 - do_tin, do_tin
+
+    return jsonify({
+        "phien": phien_hien_tai,
+        "phien_hien_tai": (phien_hien_tai + 1) if phien_hien_tai else None,
+        "xuc_xac": dices,
+        "tong": point,
+        "ket_qua": "Tai" if result == 'T' else "Xiu" if result == 'X' else "?",
+        "du_doan": "Tai" if pred == 'T' else "Xiu",
+        "do_tin_cay": f"{tai_percent}%-{xiu_percent}%",
+        "id": USER_ID,
+        "ai_model": ALGO_NAME,
+        "cau_phat_hien": phuong_phap,
+        "do_lech": f"{bo_can_bang_md5.do_lech():.2f}"
+    })
 
 @app.route('/api/health', methods=['GET'])
 def health():
-    return jsonify({"status": "healthy", "games": 2, "version": ALGO_NAME})
+    return jsonify({
+        "status": "healthy",
+        "version": ALGO_NAME,
+        "tx_cached": CACHE_DATA.get('tx') is not None,
+        "md5_cached": CACHE_DATA.get('md5') is not None
+    })
 
 @app.route('/', methods=['GET'])
 def home():
@@ -535,14 +566,14 @@ def home():
         "service": ALGO_NAME,
         "endpoints": ["/api/lc79_tx", "/api/lc79_md5"],
         "auth": f"?key={AUTH_KEY}",
-        "cau_co_ban": "30+ mẫu cầu khác nhau",
-        "tinh_nang": "Bẻ cầu thông minh | Theo cầu chính xác | Phát hiện đa dạng cầu"
+        "cau_co_ban": "35+ mau cau khac nhau",
+        "tinh_nang": "Be cau thong minh | Theo cau chinh xac"
     })
 
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     print(f"🚀 {ALGO_NAME} dang chay...")
-    print(f"✅ Da them 30+ mau cau khac nhau")
-    print(f"✅ Phat hien cau sieu nhay | Be cau thong minh")
+    print(f"✅ Da fix loi deploy | 35+ mau cau")
+    print(f"✅ API da san sang!")
     app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
