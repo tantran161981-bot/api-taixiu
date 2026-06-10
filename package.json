@@ -1,0 +1,29 @@
+{
+  "name": "tai-xiu-pro-max",
+  "version": "9.0.0",
+  "description": "API dự đoán Tài Xỉu siêu cấp - Thuật toán AI cân bằng",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "pm2-start": "pm2 start server.js --name taixiu-api",
+    "pm2-stop": "pm2 stop taixiu-api",
+    "pm2-logs": "pm2 logs taixiu-api"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["taixiu", "prediction", "ai", "markov", "pattern", "cau"],
+  "author": "@Tskhang",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
