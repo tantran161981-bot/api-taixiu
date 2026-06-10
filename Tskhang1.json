@@ -1,0 +1,153 @@
+{
+  "history": {
+    "hu": [
+      {
+        "Phien": 6788827,
+        "Xuc_xac_1": 6,
+        "Xuc_xac_2": 6,
+        "Xuc_xac_3": 4,
+        "Tong": 16,
+        "Ket_qua": "Tài",
+        "Do_tin_cay": "83%",
+        "Phien_hien_tai": "6788828",
+        "Du_doan": "Tài",
+        "ket_qua_du_doan": "",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:29:06.321Z"
+      },
+      {
+        "Phien": 6788826,
+        "Xuc_xac_1": 4,
+        "Xuc_xac_2": 1,
+        "Xuc_xac_3": 6,
+        "Tong": 11,
+        "Ket_qua": "Tài",
+        "Do_tin_cay": "75%",
+        "Phien_hien_tai": "6788827",
+        "Du_doan": "Tài",
+        "ket_qua_du_doan": "",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:28:06.067Z"
+      },
+      {
+        "Phien": 6788825,
+        "Xuc_xac_1": 1,
+        "Xuc_xac_2": 3,
+        "Xuc_xac_3": 3,
+        "Tong": 7,
+        "Ket_qua": "Xỉu",
+        "Do_tin_cay": "78%",
+        "Phien_hien_tai": "6788826",
+        "Du_doan": "Tài",
+        "ket_qua_du_doan": "Đúng ✅",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:27:51.332Z"
+      },
+      {
+        "Phien": 6788825,
+        "Xuc_xac_1": 1,
+        "Xuc_xac_2": 3,
+        "Xuc_xac_3": 3,
+        "Tong": 7,
+        "Ket_qua": "Xỉu",
+        "Do_tin_cay": "78%",
+        "Phien_hien_tai": "6788826",
+        "Du_doan": "Tài",
+        "ket_qua_du_doan": "Đúng ✅",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:27:11.593Z"
+      }
+    ],
+    "md5": [
+      {
+        "Phien": 6880031,
+        "Xuc_xac_1": 4,
+        "Xuc_xac_2": 3,
+        "Xuc_xac_3": 1,
+        "Tong": 8,
+        "Ket_qua": "Xỉu",
+        "Do_tin_cay": "78%",
+        "Phien_hien_tai": "6880032",
+        "Du_doan": "Tài",
+        "ket_qua_du_doan": "",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:29:36.550Z"
+      },
+      {
+        "Phien": 6880030,
+        "Xuc_xac_1": 6,
+        "Xuc_xac_2": 1,
+        "Xuc_xac_3": 5,
+        "Tong": 12,
+        "Ket_qua": "Tài",
+        "Do_tin_cay": "74%",
+        "Phien_hien_tai": "6880031",
+        "Du_doan": "Xỉu",
+        "ket_qua_du_doan": "",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:28:36.666Z"
+      },
+      {
+        "Phien": 6880029,
+        "Xuc_xac_1": 6,
+        "Xuc_xac_2": 2,
+        "Xuc_xac_3": 3,
+        "Tong": 11,
+        "Ket_qua": "Tài",
+        "Do_tin_cay": "76%",
+        "Phien_hien_tai": "6880030",
+        "Du_doan": "Xỉu",
+        "ket_qua_du_doan": "",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:28:06.425Z"
+      },
+      {
+        "Phien": 6880029,
+        "Xuc_xac_1": 6,
+        "Xuc_xac_2": 2,
+        "Xuc_xac_3": 3,
+        "Tong": 11,
+        "Ket_qua": "Tài",
+        "Do_tin_cay": "76%",
+        "Phien_hien_tai": "6880030",
+        "Du_doan": "Xỉu",
+        "ket_qua_du_doan": "",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:28:02.143Z"
+      },
+      {
+        "Phien": 6880028,
+        "Xuc_xac_1": 1,
+        "Xuc_xac_2": 1,
+        "Xuc_xac_3": 5,
+        "Tong": 7,
+        "Ket_qua": "Xỉu",
+        "Do_tin_cay": "84%",
+        "Phien_hien_tai": "6880029",
+        "Du_doan": "Tài",
+        "ket_qua_du_doan": "Đúng ✅",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:27:30.196Z"
+      },
+      {
+        "Phien": 6880028,
+        "Xuc_xac_1": 1,
+        "Xuc_xac_2": 1,
+        "Xuc_xac_3": 5,
+        "Tong": 7,
+        "Ket_qua": "Xỉu",
+        "Do_tin_cay": "84%",
+        "Phien_hien_tai": "6880029",
+        "Du_doan": "Tài",
+        "ket_qua_du_doan": "Đúng ✅",
+        "id": "@Tskhang",
+        "timestamp": "2026-06-09T12:27:12.219Z"
+      }
+    ]
+  },
+  "lastProcessedPhien": {
+    "hu": 6788828,
+    "md5": 6880032
+  },
+  "lastSaved": "2026-06-09T12:29:36.566Z"
+}
