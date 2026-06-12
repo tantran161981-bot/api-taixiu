@@ -1,6 +1,5 @@
 const express = require('express');
 const axios = require('axios');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -12,10 +11,16 @@ const API_URLS = {
     betvip_md5: 'https://wtxmd52.macminim6.online/v1/txmd5/lite-sessions?cp=R&cl=R&pf=web&at=7aa1c7e7ea0160fd97524740774a4c61'
 };
 
-// ==================== THUẬT TOÁN DEEP ANALYSIS ====================
-function deepAnalysis(h, gameId) {
-    // Kiểm tra dữ liệu đầu vào
-    if (!h || !Array.isArray(h) || h.length < 6) {
+// ==================== THUẬT TOÁN GỐC 100% ====================
+
+/**
+ * DEEP ANALYSIS - COPY 100% TỪ TOOL GỐC
+ * @param {Array} h - Mảng lịch sử kết quả (1=Tài, 0=Xỉu)
+ * @param {string} gameId - ID game (lc79_hu, lc79_md5, betvip_hu, betvip_md5)
+ * @returns {Object} Kết quả dự đoán
+ */
+function deepAnalysis(h, gameId = null) {
+    if (!h || h.length < 6) {
         return {
             prediction: -1,
             predictionText: "Chờ",
@@ -32,41 +37,63 @@ function deepAnalysis(h, gameId) {
         else break;
     }
     
-    // Khai báo biến
+    let maxPastStreak = 0;
+    let tempS = 1;
+    for (let i = curStreak; i < h.length - 1; i++) {
+        if (h[i] === h[i + 1]) tempS++;
+        else {
+            maxPastStreak = Math.max(maxPastStreak, tempS);
+            tempS = 1;
+        }
+    }
+
+    let taiCount = h.slice(0, 10).filter(x => x === 1).length;
+    let trend = taiCount > 5 ? 1 : (taiCount < 5 ? 0 : -1);
+
     let finalPred = -1;
     let logicMsg = "";
     let confBase = 0;
-    let v7Pred = -1;
-    let v6Pred = -1;
-    let v5Pred = -1;
-    let v4Pred = -1;
-    let v3Pred = -1;
+
+    // Khai báo các biến cho từng cấp độ
     let fastDerivativePred = -1;
     let microTrendPred = -1;
+    let v3Pred = -1;
+    let v3LogicMsg = "";
+    let v4Pred = -1;
+    let v4LogicMsg = "";
+    let v5Pred = -1;
+    let v5LogicMsg = "";
+    let v6Pred = -1;
+    let v6LogicMsg = "";
+    let v7Pred = -1;
+    let v7LogicMsg = "";
     let apiSpecificPred = -1;
+    let apiLogicMsg = "";
 
-    // ================= LC79 MD5 =================
+    // ================= TÁCH RIÊNG LC79 MD5 =================
     if (gameId === 'lc79_md5') {
         let apiHistoryStr = h.slice(0, 5).join('');
         if (apiHistoryStr === '11111' || apiHistoryStr === '00000') {
             apiSpecificPred = h[0] === 1 ? 0 : 1;
-            logicMsg = "LC MD5: ĐỈNH BỆT -> BẺ";
+            apiLogicMsg = "LC MD5 (API DIRECT): ĐỈNH BỆT -> BẺ";
         } else if (apiHistoryStr.startsWith('101') || apiHistoryStr.startsWith('010')) {
             apiSpecificPred = h[0] === 1 ? 0 : 1;
-            logicMsg = "LC MD5: DÂY PING PONG";
+            apiLogicMsg = "LC MD5 (API DIRECT): DÂY PING PONG";
         } else if (h[0] === h[1] && h[1] === h[2]) {
             apiSpecificPred = h[0];
-            logicMsg = "LC MD5: THEO BỆT MỚI";
+            apiLogicMsg = "LC MD5 (API DIRECT): THEO BỆT MỚI";
         } else {
             apiSpecificPred = h[0] === 1 ? 0 : 1;
-            logicMsg = "LC MD5: ĐẢO NHỊP CHU KỲ";
+            apiLogicMsg = "LC MD5 (API DIRECT): ĐẢO NHỊP CHU KỲ NẮN";
         }
+        
         finalPred = apiSpecificPred;
+        logicMsg = apiLogicMsg;
         confBase = 98;
     } 
-    // ================= CÁC GAME KHÁC =================
+    // ================= CÁC GAME KHÁC: CHẠY QUA LÕI THUẬT TOÁN ĐA TẦNG =================
     else {
-        // V1: Fast Derivative
+        // CẦU V1: FAST DERIVATIVE (BẮT NHANH)
         if (h.length >= 6) {
             let recentChanges = 0;
             for (let i = 0; i < 3; i++) {
@@ -76,225 +103,318 @@ function deepAnalysis(h, gameId) {
             else if (h[1] === h[2] && h[2] === h[3] && h[0] !== h[1]) fastDerivativePred = h[0];
         }
 
-        // V2: Micro Trend
+        // CẦU V2: MICRO TREND (TRỌNG SỐ)
         if (h.length >= 5) {
             let score = (h[0] * 5) + (h[1] * 3) + (h[2] * 2) + (h[3] * 1) - (h[4] * 1);
             if (score > 6 && h[0] === 1) microTrendPred = 1;
             else if (score < 4 && h[0] === 0) microTrendPred = 0;
         }
 
-        // V3: Chu kỳ 3 nhịp
+        // CẦU V3: CHU KỲ 3 NHỊP
         if (h.length >= 18) {
             let match3_1 = (h[0] === h[3] && h[1] === h[4] && h[2] === h[5]);
             if (match3_1) {
                 v3Pred = h[2];
-                logicMsg = "V3: LẶP CHU KỲ 3 NHỊP";
+                v3LogicMsg = "CẦU V3: LẶP CHU KỲ 3 NHỊP -> ĐÁNH THEO KHUÔN";
             }
         }
 
-        // V4: Đối xứng
-        if (h.length >= 20 && v3Pred === -1) {
+        // CẦU V4: ĐỐI XỨNG VÀ CHU KỲ
+        if (h.length >= 20) {
             if (h[0] === h[4] && h[1] === h[3] && h[0] !== h[2]) {
                 v4Pred = h[0];
-                logicMsg = "V4: ĐỐI XỨNG GƯƠNG TÂM";
+                v4LogicMsg = "CẦU V4: ĐỐI XỨNG GƯƠNG TÂM";
             } else if (pStr.startsWith('100111') || pStr.startsWith('011000')) {
                 v4Pred = h[0] === 1 ? 1 : 0;
-                logicMsg = "V4: THÁP TIẾN CẤP";
+                v4LogicMsg = "CẦU V4: THÁP TIẾN CẤP ĐANG MỞ";
             } else if (h.slice(0, 6).join('') === h.slice(6, 12).join('')) {
                 v4Pred = h[6];
-                logicMsg = "V4: BÃO LẶP CHU KỲ 6";
+                v4LogicMsg = "CẦU V4: BÃO LẶP CHU KỲ 6 NHỊP";
             }
         }
 
-        // V5: Markov Chain
-        if (h.length >= 25 && v4Pred === -1 && v3Pred === -1) {
-            if (curStreak > 6) {
-                v5Pred = h[0] === 1 ? 0 : 1;
-                logicMsg = "V5: ĐỈNH BỆT -> ÉP BẺ";
+        // CẦU V5: MARKOV CHAIN & ĐỈNH BỆT
+        if (h.length >= 25) {
+            let transitions = { '00': { 0: 0, 1: 0 }, '01': { 0: 0, 1: 0 }, '10': { 0: 0, 1: 0 }, '11': { 0: 0, 1: 0 } };
+            for (let i = 0; i < h.length - 2; i++) {
+                let state = "" + h[i + 2] + h[i + 1];
+                let next = h[i];
+                if (transitions[state]) transitions[state][next]++;
+            }
+            let currentState = "" + h[1] + h[0];
+            if (transitions[currentState]) {
+                let next0 = transitions[currentState][0];
+                let next1 = transitions[currentState][1];
+                if (next1 > next0 + 1) {
+                    v5Pred = 1;
+                    v5LogicMsg = "CẦU V5: MARKOV CHAIN (TỶ LỆ KÉP)";
+                } else if (next0 > next1 + 1) {
+                    v5Pred = 0;
+                    v5LogicMsg = "CẦU V5: MARKOV CHAIN (TỶ LỆ KÉP)";
+                }
             }
         }
+        if (curStreak > 6) {
+            v5Pred = h[0] === 1 ? 0 : 1;
+            v5LogicMsg = "CẦU V5: ĐỈNH BỆT ẢO -> ÉP BẺ NHỊP";
+        }
 
-        // V6: Pattern dài hạn
-        if (h.length >= 30 && v5Pred === -1 && v4Pred === -1 && v3Pred === -1) {
+        // CẦU V6: PATTERN DÀI HẠN
+        if (h.length >= 30) {
             let isPingPongLong = true;
             for (let i = 0; i < 8; i++) {
                 if (h[i] === h[i + 1]) isPingPongLong = false;
             }
+            
+            let is22Long = true;
+            for (let i = 0; i < 8; i += 2) {
+                if (h[i] !== h[i + 1] || (i < 6 && h[i] === h[i + 2])) is22Long = false;
+            }
+            
+            let is123Long = (pStr.startsWith('100111') || pStr.startsWith('011000'));
+            let is321Long = (pStr.startsWith('111001') || pStr.startsWith('000110'));
+            
             if (isPingPongLong) {
                 v6Pred = h[0] === 1 ? 0 : 1;
-                logicMsg = "V6: PING PONG DÀI HẠN (1-1)";
+                v6LogicMsg = "CẦU V6: PING PONG DÀI HẠN (1-1)";
+            } else if (is22Long) {
+                let countConsecutive = h[0] === h[1] ? 2 : 1;
+                v6Pred = countConsecutive === 2 ? (h[0] === 1 ? 0 : 1) : h[0];
+                v6LogicMsg = "CẦU V6: KHUÔN 2-2 BỀN VỮNG";
+            } else if (is123Long) {
+                v6Pred = h[0] === 1 ? 0 : 1;
+                v6LogicMsg = "CẦU V6: BƯỚC TIẾN 1-2-3";
+            } else if (is321Long) {
+                v6Pred = h[0] === 1 ? 1 : 0;
+                v6LogicMsg = "CẦU V6: BƯỚC LÙI 3-2-1";
+            } else {
+                let targetPattern = h.slice(0, 4).join('');
+                let matchTai = 0;
+                let matchXiu = 0;
+                
+                for (let i = 1; i <= h.length - 5; i++) {
+                    let historicalPattern = h.slice(i, i + 4).join('');
+                    if (targetPattern === historicalPattern) {
+                        if (h[i - 1] === 1) matchTai++;
+                        else matchXiu++;
+                    }
+                }
+                
+                if (matchTai > matchXiu && matchTai >= 2) {
+                    v6Pred = 1;
+                    v6LogicMsg = "CẦU V6: MATCHING TOÀN CẢNH (LẶP LỊCH SỬ)";
+                } else if (matchXiu > matchTai && matchXiu >= 2) {
+                    v6Pred = 0;
+                    v6LogicMsg = "CẦU V6: MATCHING TOÀN CẢNH (LẶP LỊCH SỬ)";
+                }
             }
         }
 
-        // V7: Super Entropy & XOR
-        if (h.length >= 15 && v6Pred === -1 && v5Pred === -1 && v4Pred === -1 && v3Pred === -1) {
+        // CẦU V7: SIÊU THUẬT TOÁN ENTROPY, BIT & XOR
+        if (h.length >= 15) {
             let xorValue = h[0] ^ h[1] ^ h[2];
             let bitShift = (h[3] << 1) | h[4];
             let rawEntropy = (h[0] * 8) + (h[1] * 4) + (h[2] * 2) + h[3];
             
             if (xorValue === 1 && bitShift > 1 && rawEntropy > 7) {
                 v7Pred = 1;
-                logicMsg = "V7: SUPER ENTROPY & XOR (TÀI)";
+                v7LogicMsg = "CẦU V7: SUPER ENTROPY & XOR (BIT SHIFT TÀI)";
             } else if (xorValue === 0 && bitShift <= 1 && rawEntropy <= 7) {
                 v7Pred = 0;
-                logicMsg = "V7: SUPER ENTROPY & XOR (XỈU)";
+                v7LogicMsg = "CẦU V7: SUPER ENTROPY & XOR (BIT SHIFT XỈU)";
             }
         }
 
-        // Xét ưu tiên
+        // Xét độ ưu tiên (V7 cao nhất)
         if (v7Pred !== -1) {
             finalPred = v7Pred;
+            logicMsg = v7LogicMsg;
             confBase = 99;
         } else if (v6Pred !== -1) {
             finalPred = v6Pred;
+            logicMsg = v6LogicMsg;
             confBase = 99;
         } else if (v5Pred !== -1) {
             finalPred = v5Pred;
+            logicMsg = v5LogicMsg;
             confBase = 99;
         } else if (v4Pred !== -1) {
             finalPred = v4Pred;
+            logicMsg = v4LogicMsg;
             confBase = 99;
         } else if (v3Pred !== -1) {
             finalPred = v3Pred;
+            logicMsg = "VIP V3: " + v3LogicMsg;
             confBase = 98;
         } else if (fastDerivativePred !== -1) {
             finalPred = fastDerivativePred;
+            logicMsg = "VIP 9: BẮT NGUYÊN TỬ NHANH";
             confBase = 95;
-            logicMsg = "V1: BẮT NGUYÊN TỬ NHANH";
         } else if (microTrendPred !== -1 && curStreak <= 3) {
             finalPred = microTrendPred;
+            logicMsg = "VIP 10: SIÊU TRỌNG SỐ";
             confBase = 94;
-            logicMsg = "V2: SIÊU TRỌNG SỐ";
         } else {
             finalPred = h[0] === 1 ? 0 : 1;
-            confBase = 85;
             logicMsg = "ĐẢO NHỊP TIÊU CHUẨN";
+            confBase = 85;
         }
     }
 
-    // Tính confidence
-    let variance = (h[0] === h[1] && curStreak < 3) ? 2 : 0;
+    // Tính confidence cuối cùng
+    let variance = (h[0] === h[1] && curStreak < 3 ? 2 : 0);
     let finalConfidence = Math.min(Math.max(confBase + variance, 65), 99);
-    
-    let predictionText = "Chờ";
-    if (finalPred === 1) predictionText = "Tài";
-    else if (finalPred === 0) predictionText = "Xỉu";
 
     return {
-        predictionText: predictionText,
-        confidence: finalConfidence,
-        message: logicMsg
+        prediction: finalPred,
+        predictionText: finalPred === 1 ? "Tài" : (finalPred === 0 ? "Xỉu" : "Chờ"),
+        confidence: finalConfidence
     };
 }
 
-// ==================== LẤY DỮ LIỆU API ====================
+// ==================== LẤY DỮ LIỆU TỪ API ====================
 async function fetchGameData(apiUrl) {
     try {
         const response = await axios.get(apiUrl, { timeout: 8000 });
         const raw = response.data;
         const list = raw.list || raw.data || [];
         
-        if (!list || !list.length) return null;
+        if (!list.length) return null;
         
-        const history = [];
-        for (let i = 0; i < list.length; i++) {
-            const item = list[i];
+        return list.map(item => {
             let sum = (item.dice1 || 0) + (item.dice2 || 0) + (item.dice3 || 0);
             if (sum === 0 && item.resultTruyenThong) {
-                history.push(item.resultTruyenThong === 'TAI' ? 1 : 0);
-            } else {
-                history.push(sum > 10 ? 1 : 0);
+                return item.resultTruyenThong === 'TAI' ? 1 : 0;
             }
-        }
-        return history;
+            return sum > 10 ? 1 : 0;
+        });
     } catch (error) {
-        console.error('Fetch error:', error.message);
+        console.error(`Fetch error:`, error.message);
         return null;
     }
 }
 
-// ==================== DỰ ĐOÁN ====================
-async function getPrediction(gameId, apiUrl, isReversed) {
+// ==================== DỰ ĐOÁN CHO LC79 ====================
+async function predictLC79(gameId, apiUrl) {
     const history = await fetchGameData(apiUrl);
     if (!history || history.length < 5) {
-        return {
-            phien_hien_tai: null,
-            du_doan: "Lỗi",
-            do_tin_cay: "0%"
-        };
+        return { error: "Không thể lấy dữ liệu", phien_hien_tai: 0, du_doan: "Lỗi", do_tin_cay: "0%" };
     }
     
     const currentPhien = history.length;
-    const result = deepAnalysis(history, gameId);
+    const lastResult = history[0];
     
-    let finalPrediction = result.predictionText;
-    let finalConfidence = result.confidence;
-    
-    // BETVIP: đảo ngược
-    if (isReversed && finalPrediction !== "Chờ") {
-        finalPrediction = finalPrediction === "Tài" ? "Xỉu" : "Tài";
-        finalConfidence = Math.max(55, finalConfidence - 5);
-    }
+    // DỰ ĐOÁN PHIÊN TIẾP THEO
+    const prediction = deepAnalysis(history, gameId);
     
     return {
         phien_hien_tai: currentPhien + 1,
-        du_doan: finalPrediction,
-        do_tin_cay: finalConfidence + "%"
+        du_doan: prediction.predictionText,
+        do_tin_cay: `${prediction.confidence}%`
     };
 }
 
-// ==================== ENDPOINTS ====================
+// ==================== DỰ ĐOÁN CHO BETVIP (NGƯỢC VỚI HIỆN TẠI) ====================
+async function predictBetVIP(gameId, apiUrl) {
+    const history = await fetchGameData(apiUrl);
+    if (!history || history.length < 1) {
+        return { error: "Không thể lấy dữ liệu", phien_hien_tai: 0, du_doan: "Lỗi", do_tin_cay: "0%" };
+    }
+    
+    const currentPhien = history.length;
+    const lastResult = history[0];
+    
+    // DỰ ĐOÁN NGƯỢC: Nếu kết quả hiện tại là Tài (1) thì dự đoán Xỉu (0), ngược lại
+    const oppositePrediction = lastResult === 1 ? "Xỉu" : "Tài";
+    
+    return {
+        phien_hien_tai: currentPhien + 1,
+        du_doan: oppositePrediction,
+        do_tin_cay: "99%"
+    };
+}
+
+// ==================== API ENDPOINTS ====================
+
 app.get('/', (req, res) => {
     res.json({
         name: "TÀI XỈU SUPER AI API",
         version: "7.0",
-        author: "VI LONG",
+        author: "ANH QUAN",
+        description: "Thuật toán V1-V7 - LC79 giữ nguyên, BETVIP dự đoán ngược",
         endpoints: {
-            "/lc79-hu": "LC79 Tài Xỉu Hũ (giống tool 100%)",
-            "/lc79-md5": "LC79 Tài Xỉu MD5 (giống tool 100%)",
-            "/betvip-hu": "BETVIP Tài Xỉu Hũ (ĐẢO NGƯỢC)",
-            "/betvip-md5": "BETVIP Tài Xỉu MD5 (ĐẢO NGƯỢC)"
+            "/lc79-hu": "Dự đoán LC79 Tài Xỉu Hũ",
+            "/lc79-md5": "Dự đoán LC79 Tài Xỉu MD5",
+            "/betvip-hu": "Dự đoán BETVIP Tài Xỉu Hũ (dự đoán ngược)",
+            "/betvip-md5": "Dự đoán BETVIP Tài Xỉu MD5 (dự đoán ngược)"
         }
     });
 });
 
+// API LC79 HŨ
 app.get('/lc79-hu', async (req, res) => {
     try {
-        const result = await getPrediction('lc79_hu', API_URLS.lc79_hu, false);
+        const result = await predictLC79('lc79_hu', API_URLS.lc79_hu);
+        if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
-        res.status(500).json({ phien_hien_tai: null, du_doan: "Lỗi", do_tin_cay: "0%" });
+        res.status(500).json({ error: error.message });
     }
 });
 
+// API LC79 MD5
 app.get('/lc79-md5', async (req, res) => {
     try {
-        const result = await getPrediction('lc79_md5', API_URLS.lc79_md5, false);
+        const result = await predictLC79('lc79_md5', API_URLS.lc79_md5);
+        if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
-        res.status(500).json({ phien_hien_tai: null, du_doan: "Lỗi", do_tin_cay: "0%" });
+        res.status(500).json({ error: error.message });
     }
 });
 
+// API BETVIP HŨ
 app.get('/betvip-hu', async (req, res) => {
     try {
-        const result = await getPrediction('betvip_hu', API_URLS.betvip_hu, true);
+        const result = await predictBetVIP('betvip_hu', API_URLS.betvip_hu);
+        if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
-        res.status(500).json({ phien_hien_tai: null, du_doan: "Lỗi", do_tin_cay: "0%" });
+        res.status(500).json({ error: error.message });
     }
 });
 
+// API BETVIP MD5
 app.get('/betvip-md5', async (req, res) => {
     try {
-        const result = await getPrediction('betvip_md5', API_URLS.betvip_md5, true);
+        const result = await predictBetVIP('betvip_md5', API_URLS.betvip_md5);
+        if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
-        res.status(500).json({ phien_hien_tai: null, du_doan: "Lỗi", do_tin_cay: "0%" });
+        res.status(500).json({ error: error.message });
     }
 });
 
 // ==================== KHỞI ĐỘNG ====================
+
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   🚀 TÀI XỈU SUPER AI API - THUẬT TOÁN V1-V7                            ║
+║   📡 PORT: ${PORT}                                                           ║
+║   👤 AUTHOR: ANH QUAN                                                     ║
+║                                                                           ║
+║   🧠 THUẬT TOÁN:                                                          ║
+║      ├─ LC79: GIỮ NGUYÊN THUẬT TOÁN GỐC (V1-V7)                         ║
+║      └─ BETVIP: DỰ ĐOÁN NGƯỢC VỚI KẾT QUẢ HIỆN TẠI                      ║
+║                                                                           ║
+║   📡 ENDPOINTS:                                                           ║
+║      GET /lc79-hu      - LC79 Tài Xỉu Hũ                                ║
+║      GET /lc79-md5     - LC79 Tài Xỉu MD5                               ║
+║      GET /betvip-hu    - BETVIP Tài Xỉu Hũ (dự đoán ngược)              ║
+║      GET /betvip-md5   - BETVIP Tài Xỉu MD5 (dự đoán ngược)             ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+    `);
 });
