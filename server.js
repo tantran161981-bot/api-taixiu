@@ -1,7 +1,11 @@
 const express = require('express');
 const axios = require('axios');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// ==================== FILE LƯU TRỮ ====================
+const HISTORY_FILE = './prediction_history.json';
 
 // ==================== CẤU HÌNH API ====================
 const API_URLS = {
@@ -11,23 +15,61 @@ const API_URLS = {
     betvip_md5: 'https://wtxmd52.macminim6.online/v1/txmd5/lite-sessions?cp=R&cl=R&pf=web&at=7aa1c7e7ea0160fd97524740774a4c61'
 };
 
-// ==================== THUẬT TOÁN GỐC TỪ TOOL ====================
+// ==================== CẤU TRÚC LỊCH SỬ ====================
+let predictionHistory = {
+    lc79_hu: [],
+    lc79_md5: [],
+    betvip_hu: [],
+    betvip_md5: []
+};
+
+let stats = {
+    lc79_hu: { total: 0, correct: 0, wrong: 0, accuracy: 0, currentStreak: 0, bestStreak: 0 },
+    lc79_md5: { total: 0, correct: 0, wrong: 0, accuracy: 0, currentStreak: 0, bestStreak: 0 },
+    betvip_hu: { total: 0, correct: 0, wrong: 0, accuracy: 0, currentStreak: 0, bestStreak: 0 },
+    betvip_md5: { total: 0, correct: 0, wrong: 0, accuracy: 0, currentStreak: 0, bestStreak: 0 }
+};
+
+// ==================== LOAD/SAVE HISTORY ====================
+function loadHistory() {
+    try {
+        if (fs.existsSync(HISTORY_FILE)) {
+            const data = fs.readFileSync(HISTORY_FILE, 'utf8');
+            const parsed = JSON.parse(data);
+            if (parsed.predictionHistory) predictionHistory = parsed.predictionHistory;
+            if (parsed.stats) stats = parsed.stats;
+            console.log('✅ Đã tải lịch sử dự đoán');
+        }
+    } catch (error) {
+        console.error('Lỗi tải lịch sử:', error.message);
+    }
+}
+
+function saveHistory() {
+    try {
+        const data = { predictionHistory, stats, lastSaved: new Date().toISOString() };
+        fs.writeFileSync(HISTORY_FILE, JSON.stringify(data, null, 2));
+    } catch (error) {
+        console.error('Lỗi lưu lịch sử:', error.message);
+    }
+}
+
+// ==================== THUẬT TOÁN GỐC 100% TỪ TOOL HTML ====================
 
 /**
  * DEEP ANALYSIS - COPY 100% TỪ TOOL CỦA BẠN
- * @param {Array} history - Mảng lịch sử kết quả (1=Tài, 0=Xỉu)
- * @param {string} gameId - ID game (để xử lý đặc biệt cho LC79 MD5)
+ * @param {Array} h - Mảng lịch sử kết quả (1=Tài, 0=Xỉu)
+ * @param {string} gameId - ID game (lc79_hu, lc79_md5, betvip_hu, betvip_md5)
  * @returns {Object} Kết quả dự đoán
  */
-function deepAnalysis(history, gameId = null) {
-    const h = history;
-    
+function deepAnalysis(h, gameId = null) {
     if (!h || h.length < 6) {
         return {
             prediction: -1,
+            predictionText: "Chờ",
             confidence: 50,
             message: "CẦU CHƯA ỔN ĐỊNH",
-            details: { error: "Not enough data" }
+            algorithm: "N/A"
         };
     }
 
@@ -54,11 +96,24 @@ function deepAnalysis(history, gameId = null) {
     let finalPred = -1;
     let logicMsg = "";
     let confBase = 0;
+
+    // Khai báo các biến cho từng cấp độ
+    let fastDerivativePred = -1;
+    let microTrendPred = -1;
+    let v3Pred = -1;
+    let v3LogicMsg = "";
+    let v4Pred = -1;
+    let v4LogicMsg = "";
+    let v5Pred = -1;
+    let v5LogicMsg = "";
+    let v6Pred = -1;
+    let v6LogicMsg = "";
+    let v7Pred = -1;
+    let v7LogicMsg = "";
     let apiSpecificPred = -1;
     let apiLogicMsg = "";
-    let apiConfBase = 0;
 
-    // ================= TÁCH RIÊNG LC79 MD5 (DỰ ĐOÁN TỰ ĐỘNG BẰNG API RAW) =================
+    // ================= TÁCH RIÊNG LC79 MD5 =================
     if (gameId === 'lc79_md5') {
         let apiHistoryStr = h.slice(0, 5).join('');
         if (apiHistoryStr === '11111' || apiHistoryStr === '00000') {
@@ -74,16 +129,14 @@ function deepAnalysis(history, gameId = null) {
             apiSpecificPred = h[0] === 1 ? 0 : 1;
             apiLogicMsg = "LC MD5 (API DIRECT): ĐẢO NHỊP CHU KỲ NẮN";
         }
-        apiConfBase = 98;
         
-        finalPred = apiSpecificPred !== -1 ? apiSpecificPred : (h[0] === 1 ? 0 : 1);
+        finalPred = apiSpecificPred;
         logicMsg = apiLogicMsg;
-        confBase = apiConfBase;
-    } else {
-        // ================= CÁC GAME KHÁC: CHẠY QUA LÕI THUẬT TOÁN ĐA TẦNG =================
-        
+        confBase = 98;
+    } 
+    // ================= CÁC GAME KHÁC: CHẠY QUA LÕI THUẬT TOÁN ĐA TẦNG =================
+    else {
         // CẦU V1: FAST DERIVATIVE (BẮT NHANH)
-        let fastDerivativePred = -1;
         if (h.length >= 6) {
             let recentChanges = 0;
             for (let i = 0; i < 3; i++) {
@@ -94,7 +147,6 @@ function deepAnalysis(history, gameId = null) {
         }
 
         // CẦU V2: MICRO TREND (TRỌNG SỐ)
-        let microTrendPred = -1;
         if (h.length >= 5) {
             let score = (h[0] * 5) + (h[1] * 3) + (h[2] * 2) + (h[3] * 1) - (h[4] * 1);
             if (score > 6 && h[0] === 1) microTrendPred = 1;
@@ -102,8 +154,6 @@ function deepAnalysis(history, gameId = null) {
         }
 
         // CẦU V3: CHU KỲ 3 NHỊP
-        let v3Pred = -1;
-        let v3LogicMsg = "";
         if (h.length >= 18) {
             let match3_1 = (h[0] === h[3] && h[1] === h[4] && h[2] === h[5]);
             if (match3_1) {
@@ -113,8 +163,6 @@ function deepAnalysis(history, gameId = null) {
         }
 
         // CẦU V4: ĐỐI XỨNG VÀ CHU KỲ
-        let v4Pred = -1;
-        let v4LogicMsg = "";
         if (h.length >= 20) {
             if (h[0] === h[4] && h[1] === h[3] && h[0] !== h[2]) {
                 v4Pred = h[0];
@@ -129,8 +177,6 @@ function deepAnalysis(history, gameId = null) {
         }
 
         // CẦU V5: MARKOV CHAIN & ĐỈNH BỆT
-        let v5Pred = -1;
-        let v5LogicMsg = "";
         if (h.length >= 25) {
             let transitions = { '00': { 0: 0, 1: 0 }, '01': { 0: 0, 1: 0 }, '10': { 0: 0, 1: 0 }, '11': { 0: 0, 1: 0 } };
             for (let i = 0; i < h.length - 2; i++) {
@@ -156,9 +202,7 @@ function deepAnalysis(history, gameId = null) {
             v5LogicMsg = "CẦU V5: ĐỈNH BỆT ẢO -> ÉP BẺ NHỊP";
         }
 
-        // CẦU V6: PATTERN DÀI HẠN (PING PONG, 2-2, 1-2-3, 3-2-1, MATCHING)
-        let v6Pred = -1;
-        let v6LogicMsg = "";
+        // CẦU V6: PATTERN DÀI HẠN
         if (h.length >= 30) {
             let isPingPongLong = true;
             for (let i = 0; i < 8; i++) {
@@ -210,8 +254,6 @@ function deepAnalysis(history, gameId = null) {
         }
 
         // CẦU V7: SIÊU THUẬT TOÁN ENTROPY, BIT & XOR
-        let v7Pred = -1;
-        let v7LogicMsg = "";
         if (h.length >= 15) {
             let xorValue = h[0] ^ h[1] ^ h[2];
             let bitShift = (h[3] << 1) | h[4];
@@ -266,17 +308,24 @@ function deepAnalysis(history, gameId = null) {
     let variance = (h[0] === h[1] && curStreak < 3 ? 2 : 0);
     let finalConfidence = Math.min(Math.max(confBase + variance, 65), 99);
 
+    // Xác định thuật toán đã sử dụng
+    let algorithmUsed = "Default";
+    if (gameId === 'lc79_md5') algorithmUsed = "LC MD5 DIRECT";
+    else if (v7Pred !== -1) algorithmUsed = "V7 - Super Entropy & XOR";
+    else if (v6Pred !== -1) algorithmUsed = "V6 - Pattern Dài Hạn";
+    else if (v5Pred !== -1) algorithmUsed = "V5 - Markov Chain";
+    else if (v4Pred !== -1) algorithmUsed = "V4 - Đối Xứng & Chu Kỳ";
+    else if (v3Pred !== -1) algorithmUsed = "V3 - Chu Kỳ 3 Nhịp";
+    else if (fastDerivativePred !== -1) algorithmUsed = "V1 - Fast Derivative";
+    else if (microTrendPred !== -1) algorithmUsed = "V2 - Micro Trend";
+
     return {
-        prediction: finalPred === 1 ? "Tài" : "Xỉu",
-        predictionCode: finalPred,
+        prediction: finalPred,
+        predictionText: finalPred === 1 ? "Tài" : (finalPred === 0 ? "Xỉu" : "Chờ"),
         confidence: finalConfidence,
         message: logicMsg,
-        streak: curStreak,
-        details: {
-            history10: h.slice(0, 10).map(v => v === 1 ? "Tài" : "Xỉu"),
-            taiCount10: h.slice(0, 10).filter(v => v === 1).length,
-            algorithm: finalPred !== -1 ? (v7Pred !== -1 ? "V7" : (v6Pred !== -1 ? "V6" : (v5Pred !== -1 ? "V5" : (v4Pred !== -1 ? "V4" : (v3Pred !== -1 ? "V3" : "V1-V2"))))) : "Default"
-        }
+        algorithm: algorithmUsed,
+        streak: curStreak
     };
 }
 
@@ -302,195 +351,210 @@ async function fetchGameData(apiUrl) {
     }
 }
 
+// ==================== CẬP NHẬT LỊCH SỬ VÀ KIỂM TRA ĐÚNG/SAI ====================
+async function updateAndPredict(gameId, apiUrl) {
+    const history = await fetchGameData(apiUrl);
+    if (!history || history.length < 5) {
+        return { error: "Không thể lấy dữ liệu", history: history };
+    }
+    
+    // Lấy phiên mới nhất
+    const currentPhien = history.length > 0 ? history.length : 0;
+    const lastResult = history[0]; // 1 hoặc 0
+    
+    // KIỂM TRA DỰ ĐOÁN TRƯỚC ĐÓ CÓ ĐÚNG KHÔNG
+    const lastPredictionRecord = predictionHistory[gameId][0];
+    if (lastPredictionRecord && !lastPredictionRecord.ket_qua_thuc_te) {
+        const wasCorrect = (lastPredictionRecord.du_doan_code === lastResult);
+        lastPredictionRecord.ket_qua_thuc_te = lastResult === 1 ? "Tài" : "Xỉu";
+        lastPredictionRecord.ket_qua_du_doan = wasCorrect ? "Đúng ✅" : "Sai ❌";
+        
+        // Cập nhật stats
+        const gameStats = stats[gameId];
+        gameStats.total++;
+        if (wasCorrect) {
+            gameStats.correct++;
+            gameStats.currentStreak = Math.max(1, gameStats.currentStreak + 1);
+            if (gameStats.currentStreak > gameStats.bestStreak) {
+                gameStats.bestStreak = gameStats.currentStreak;
+            }
+        } else {
+            gameStats.wrong++;
+            gameStats.currentStreak = Math.min(-1, gameStats.currentStreak - 1);
+        }
+        gameStats.accuracy = (gameStats.correct / gameStats.total * 100).toFixed(1);
+        
+        saveHistory();
+    }
+    
+    // DỰ ĐOÁN PHIÊN TIẾP THEO
+    const prediction = deepAnalysis(history, gameId);
+    
+    // Lưu dự đoán mới
+    const newRecord = {
+        thoi_gian: new Date().toISOString(),
+        phien: currentPhien + 1,
+        du_doan: prediction.predictionText,
+        du_doan_code: prediction.prediction,
+        do_tin_cay: `${prediction.confidence}%`,
+        thuat_toan: prediction.algorithm,
+        phan_tich: prediction.message,
+        ket_qua_thuc_te: null,
+        ket_qua_du_doan: null
+    };
+    
+    predictionHistory[gameId].unshift(newRecord);
+    if (predictionHistory[gameId].length > 50) predictionHistory[gameId].pop();
+    saveHistory();
+    
+    // Lấy 10 phiên gần nhất để hiển thị
+    const last10History = history.slice(0, 10).map(v => v === 1 ? "Tài" : "Xỉu");
+    const taiCount10 = history.slice(0, 10).filter(v => v === 1).length;
+    
+    return {
+        success: true,
+        game: gameId,
+        phien_hien_tai: currentPhien,
+        ket_qua_cuoi: lastResult === 1 ? "Tài" : "Xỉu",
+        du_doan: prediction.predictionText,
+        do_tin_cay: `${prediction.confidence}%`,
+        thuat_toan: prediction.algorithm,
+        phan_tich: prediction.message,
+        thong_ke_10_phien: {
+            chuoi: last10History,
+            tai: taiCount10,
+            xiu: 10 - taiCount10
+        },
+        stats: stats[gameId],
+        lich_su_gan_day: predictionHistory[gameId].slice(0, 10),
+        timestamp: new Date().toISOString(),
+        id: "@vilong"
+    };
+}
+
 // ==================== API ENDPOINTS ====================
 
-// Trang chủ
 app.get('/', (req, res) => {
     res.json({
         name: "TÀI XỈU SUPER AI API",
         version: "7.0",
         author: "VI LONG",
-        description: "Thuật toán V3, V4, V5, V6, V7 - Độ chính xác cao",
+        description: "Thuật toán V1-V7 - Có lịch sử dự đoán và kiểm tra đúng/sai",
         endpoints: {
             "/lc79-hu": "Dự đoán LC79 Tài Xỉu Hũ",
             "/lc79-md5": "Dự đoán LC79 Tài Xỉu MD5",
             "/betvip-hu": "Dự đoán BETVIP Tài Xỉu Hũ",
             "/betvip-md5": "Dự đoán BETVIP Tài Xỉu MD5",
-            "/predict?history=1,0,1,1,0": "Dự đoán từ history tùy chỉnh"
+            "/stats": "Xem thống kê tổng hợp",
+            "/lichsu/:gameId": "Xem lịch sử dự đoán của game"
         }
     });
 });
 
-// API dự đoán LC79 HŨ
+// API LC79 HŨ
 app.get('/lc79-hu', async (req, res) => {
     try {
-        const history = await fetchGameData(API_URLS.lc79_hu);
-        if (!history || history.length < 5) {
-            return res.status(500).json({ error: "Không thể lấy dữ liệu", history: history });
-        }
-        
-        const result = deepAnalysis(history, 'lc79_hu');
-        
-        res.json({
-            success: true,
-            game: "LC79 - TÀI XỈU HŨ",
-            du_doan: result.prediction,
-            do_tin_cay: `${result.confidence}%`,
-            thuat_toan: result.details.algorithm,
-            phan_tich: result.message,
-            thong_ke: {
-                chuoi_10_phien: result.details.history10,
-                tai_10_phien: result.details.taiCount10,
-                xiu_10_phien: 10 - result.details.taiCount10
-            },
-            timestamp: new Date().toISOString(),
-            id: "@vilong"
-        });
+        const result = await updateAndPredict('lc79_hu', API_URLS.lc79_hu);
+        if (result.error) return res.status(500).json(result);
+        res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// API dự đoán LC79 MD5
+// API LC79 MD5
 app.get('/lc79-md5', async (req, res) => {
     try {
-        const history = await fetchGameData(API_URLS.lc79_md5);
-        if (!history || history.length < 5) {
-            return res.status(500).json({ error: "Không thể lấy dữ liệu", history: history });
-        }
-        
-        const result = deepAnalysis(history, 'lc79_md5');
-        
-        res.json({
-            success: true,
-            game: "LC79 - TÀI XỈU MD5",
-            du_doan: result.prediction,
-            do_tin_cay: `${result.confidence}%`,
-            thuat_toan: "LC MD5 DIRECT",
-            phan_tich: result.message,
-            thong_ke: {
-                chuoi_10_phien: result.details.history10,
-                tai_10_phien: result.details.taiCount10,
-                xiu_10_phien: 10 - result.details.taiCount10
-            },
-            timestamp: new Date().toISOString(),
-            id: "@vilong"
-        });
+        const result = await updateAndPredict('lc79_md5', API_URLS.lc79_md5);
+        if (result.error) return res.status(500).json(result);
+        res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// API dự đoán BETVIP HŨ
+// API BETVIP HŨ
 app.get('/betvip-hu', async (req, res) => {
     try {
-        const history = await fetchGameData(API_URLS.betvip_hu);
-        if (!history || history.length < 5) {
-            return res.status(500).json({ error: "Không thể lấy dữ liệu", history: history });
-        }
-        
-        const result = deepAnalysis(history, 'betvip_hu');
-        
-        res.json({
-            success: true,
-            game: "BETVIP - TÀI XỈU HŨ",
-            du_doan: result.prediction,
-            do_tin_cay: `${result.confidence}%`,
-            thuat_toan: result.details.algorithm,
-            phan_tich: result.message,
-            thong_ke: {
-                chuoi_10_phien: result.details.history10,
-                tai_10_phien: result.details.taiCount10,
-                xiu_10_phien: 10 - result.details.taiCount10
-            },
-            timestamp: new Date().toISOString(),
-            id: "@vilong"
-        });
+        const result = await updateAndPredict('betvip_hu', API_URLS.betvip_hu);
+        if (result.error) return res.status(500).json(result);
+        res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// API dự đoán BETVIP MD5
+// API BETVIP MD5
 app.get('/betvip-md5', async (req, res) => {
     try {
-        const history = await fetchGameData(API_URLS.betvip_md5);
-        if (!history || history.length < 5) {
-            return res.status(500).json({ error: "Không thể lấy dữ liệu", history: history });
-        }
-        
-        const result = deepAnalysis(history, 'betvip_md5');
-        
-        res.json({
-            success: true,
-            game: "BETVIP - TÀI XỈU MD5",
-            du_doan: result.prediction,
-            do_tin_cay: `${result.confidence}%`,
-            thuat_toan: result.details.algorithm,
-            phan_tich: result.message,
-            thong_ke: {
-                chuoi_10_phien: result.details.history10,
-                tai_10_phien: result.details.taiCount10,
-                xiu_10_phien: 10 - result.details.taiCount10
-            },
-            timestamp: new Date().toISOString(),
-            id: "@vilong"
-        });
+        const result = await updateAndPredict('betvip_md5', API_URLS.betvip_md5);
+        if (result.error) return res.status(500).json(result);
+        res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// API dự đoán từ history tùy chỉnh (test)
-app.get('/predict', (req, res) => {
-    const historyParam = req.query.history;
-    if (!historyParam) {
-        return res.json({ error: "Thiếu tham số history. Ví dụ: ?history=1,0,1,1,0,0,1" });
-    }
-    
-    const history = historyParam.split(',').map(v => parseInt(v.trim()));
-    if (history.some(isNaN) || history.length < 5) {
-        return res.json({ error: "History không hợp lệ. Cần ít nhất 5 số (0 hoặc 1)" });
-    }
-    
-    const result = deepAnalysis(history);
-    
+// API XEM THỐNG KÊ
+app.get('/stats', (req, res) => {
     res.json({
-        success: true,
-        du_doan: result.prediction,
-        do_tin_cay: `${result.confidence}%`,
-        thuat_toan: result.details.algorithm,
-        phan_tich: result.message,
-        lich_su_nhap: history.map(v => v === 1 ? "Tài" : "Xỉu"),
-        timestamp: new Date().toISOString()
+        stats: stats,
+        total_predictions: Object.values(stats).reduce((a, b) => a + b.total, 0),
+        total_correct: Object.values(stats).reduce((a, b) => a + b.correct, 0),
+        overall_accuracy: (Object.values(stats).reduce((a, b) => a + b.correct, 0) / 
+                          Object.values(stats).reduce((a, b) => a + b.total, 1) * 100).toFixed(1) + '%',
+        last_updated: new Date().toISOString()
+    });
+});
+
+// API XEM LỊCH SỬ THEO GAME
+app.get('/lichsu/:gameId', (req, res) => {
+    const { gameId } = req.params;
+    if (!predictionHistory[gameId]) {
+        return res.status(404).json({ error: "Game không tồn tại" });
+    }
+    res.json({
+        game: gameId,
+        history: predictionHistory[gameId],
+        stats: stats[gameId],
+        total: predictionHistory[gameId].length
     });
 });
 
 // ==================== KHỞI ĐỘNG ====================
+loadHistory();
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║   🚀 TÀI XỈU SUPER AI API - THUẬT TOÁN V3-V7                ║
-║   📡 PORT: ${PORT}                                               ║
-║   👤 AUTHOR: VI LONG                                         ║
-║                                                               ║
-║   🧠 THUẬT TOÁN:                                              ║
-║      ├─ V1: FAST DERIVATIVE (BẮT NHANH)                      ║
-║      ├─ V2: MICRO TREND (TRỌNG SỐ)                          ║
-║      ├─ V3: CHU KỲ 3 NHỊP                                   ║
-║      ├─ V4: ĐỐI XỨNG GƯƠNG TÂM & THÁP TIẾN                   ║
-║      ├─ V5: MARKOV CHAIN & ĐỈNH BỆT                         ║
-║      ├─ V6: PATTERN DÀI HẠN (1-1, 2-2, 1-2-3, 3-2-1)        ║
-║      └─ V7: SUPER ENTROPY & XOR (BIT SHIFT)                 ║
-║                                                               ║
-║   📊 ENDPOINTS:                                               ║
-║      GET /lc79-hu     - LC79 Tài Xỉu Hũ                     ║
-║      GET /lc79-md5    - LC79 Tài Xỉu MD5                    ║
-║      GET /betvip-hu   - BETVIP Tài Xỉu Hũ                   ║
-║      GET /betvip-md5  - BETVIP Tài Xỉu MD5                  ║
-║      GET /predict?history=1,0,1 - Test với history tùy chỉnh ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   🚀 TÀI XỈU SUPER AI API - THUẬT TOÁN V1-V7                            ║
+║   📡 PORT: ${PORT}                                                           ║
+║   👤 AUTHOR: VI LONG                                                      ║
+║                                                                           ║
+║   🧠 THUẬT TOÁN (GIỐNG 100% TOOL HTML):                                   ║
+║      ├─ V1: FAST DERIVATIVE (BẮT NGUYÊN TỬ NHANH)                        ║
+║      ├─ V2: MICRO TREND (SIÊU TRỌNG SỐ)                                 ║
+║      ├─ V3: CHU KỲ 3 NHỊP                                               ║
+║      ├─ V4: ĐỐI XỨNG GƯƠNG TÂM & THÁP TIẾN                               ║
+║      ├─ V5: MARKOV CHAIN & ĐỈNH BỆT                                      ║
+║      ├─ V6: PATTERN DÀI HẠN (1-1, 2-2, 1-2-3, 3-2-1)                    ║
+║      └─ V7: SUPER ENTROPY & XOR (BIT SHIFT)                             ║
+║                                                                           ║
+║   📊 TÍNH NĂNG:                                                           ║
+║      ├─ Lưu lịch sử dự đoán cho từng game                                ║
+║      ├─ Tự động kiểm tra đúng/sai sau mỗi phiên                          ║
+║      ├─ Thống kê tỷ lệ chính xác, streak thắng/thua                      ║
+║      └─ Lưu trữ vào file prediction_history.json                         ║
+║                                                                           ║
+║   📡 ENDPOINTS:                                                           ║
+║      GET /lc79-hu      - LC79 Tài Xỉu Hũ                                ║
+║      GET /lc79-md5     - LC79 Tài Xỉu MD5                               ║
+║      GET /betvip-hu    - BETVIP Tài Xỉu Hũ                              ║
+║      GET /betvip-md5   - BETVIP Tài Xỉu MD5                             ║
+║      GET /stats        - Xem thống kê tổng hợp                          ║
+║      GET /lichsu/:game - Xem lịch sử dự đoán của game                   ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
     `);
 });
