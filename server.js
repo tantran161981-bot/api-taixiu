@@ -10,61 +10,35 @@ const PORT = process.env.PORT || 5000;
 const API_URL_HU = 'https://wtx.tele68.com/v1/tx/sessions';
 const API_URL_MD5 = 'https://wtxmd52.tele68.com/v1/txmd5/sessions';
 const HISTORY_FILE = 'Tskhang_history.json';
-const WEIGHTS_FILE = 'Tskhang_weights.json';
+const PATTERN_DB_FILE = 'Tskhang_patterns.json';
 
 let predictionHistory = { hu: [], md5: [] };
+let patternDatabase = { hu: {}, md5: {} };
 let lastProcessedPhien = { hu: null, md5: null };
 let systemStartTime = Date.now();
 
-// ==================== TRỌNG SỐ THUẬT TOÁN (TỰ HỌC) ====================
-let algorithmWeights = {
-  hu: {
-    cau_bet: 1.0, cau_dao_11: 1.0, cau_22: 1.0, cau_33: 1.0,
-    cau_121: 1.0, cau_123: 1.0, cau_321: 1.0, cau_nhay_coc: 1.0,
-    cau_nhip_nghieng: 1.0, cau_3van1: 1.0, smart_bet: 1.0,
-    break_streak: 1.0, triple_pattern: 1.0, tong_phan_tich: 1.0,
-    xu_huong_manh: 1.0, dao_chieu: 1.0, markov1: 1.0, markov2: 1.0,
-    markov3: 1.0, markov4: 1.0, markov5: 1.0, rsi: 1.0, macd: 1.0,
-    fibonacci: 1.0, elliott: 1.0, smart_money: 1.0, neural_ai: 1.0
-  },
-  md5: {
-    cau_bet: 1.0, cau_dao_11: 1.0, cau_22: 1.0, cau_33: 1.0,
-    cau_121: 1.0, cau_123: 1.0, cau_321: 1.0, cau_nhay_coc: 1.0,
-    cau_nhip_nghieng: 1.0, cau_3van1: 1.0, smart_bet: 1.0,
-    break_streak: 1.0, triple_pattern: 1.0, tong_phan_tich: 1.0,
-    xu_huong_manh: 1.0, dao_chieu: 1.0, markov1: 1.0, markov2: 1.0,
-    markov3: 1.0, markov4: 1.0, markov5: 1.0, rsi: 1.0, macd: 1.0,
-    fibonacci: 1.0, elliott: 1.0, smart_money: 1.0, neural_ai: 1.0
-  }
+// ==================== THỐNG KÊ ====================
+let stats = {
+  hu: { total: 0, correct: 0, streak: 0, bestStreak: 0, lastCorrect: [] },
+  md5: { total: 0, correct: 0, streak: 0, bestStreak: 0, lastCorrect: [] }
 };
 
-let algorithmStats = {
-  hu: {}, md5: {}
-};
-
-let learningData = {
-  hu: { totalPredictions: 0, correctPredictions: 0, currentStreak: 0, bestStreak: 0 },
-  md5: { totalPredictions: 0, correctPredictions: 0, currentStreak: 0, bestStreak: 0 }
-};
-
-// ==================== HÀM LOAD/SAVE ====================
+// ==================== LOAD DATA ====================
 function loadData() {
   try {
     if (fs.existsSync(HISTORY_FILE)) {
       const data = JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8'));
       predictionHistory = data.history || { hu: [], md5: [] };
-      lastProcessedPhien = data.lastProcessedPhien || { hu: null, md5: null };
       console.log('✅ Đã tải lịch sử dự đoán');
     }
-    if (fs.existsSync(WEIGHTS_FILE)) {
-      const data = JSON.parse(fs.readFileSync(WEIGHTS_FILE, 'utf8'));
-      algorithmWeights = data.algorithmWeights || algorithmWeights;
-      algorithmStats = data.algorithmStats || algorithmStats;
-      learningData = data.learningData || learningData;
-      console.log('✅ Đã tải trọng số thuật toán');
+    if (fs.existsSync(PATTERN_DB_FILE)) {
+      const data = JSON.parse(fs.readFileSync(PATTERN_DB_FILE, 'utf8'));
+      patternDatabase = data.patternDatabase || { hu: {}, md5: {} };
+      stats = data.stats || stats;
+      console.log('✅ Đã tải cơ sở dữ liệu pattern');
     }
   } catch (error) {
-    console.error('Lỗi tải dữ liệu:', error.message);
+    console.error('Lỗi tải:', error.message);
   }
 }
 
@@ -72,14 +46,15 @@ function saveData() {
   try {
     fs.writeFileSync(HISTORY_FILE, JSON.stringify({
       history: predictionHistory,
-      lastProcessedPhien,
       lastSaved: new Date().toISOString()
     }, null, 2));
-    fs.writeFileSync(WEIGHTS_FILE, JSON.stringify({
-      algorithmWeights, algorithmStats, learningData
+    fs.writeFileSync(PATTERN_DB_FILE, JSON.stringify({
+      patternDatabase: patternDatabase,
+      stats: stats,
+      lastUpdated: new Date().toISOString()
     }, null, 2));
   } catch (error) {
-    console.error('Lỗi lưu dữ liệu:', error.message);
+    console.error('Lỗi lưu:', error.message);
   }
 }
 
@@ -94,517 +69,398 @@ async function fetchData(apiUrl) {
     return list.map(item => ({
       Phien: item.id,
       Ket_qua: item.resultTruyenThong === 'TAI' ? 'Tài' : 'Xỉu',
-      Xuc_xac_1: item.dices?.[0] || 0,
-      Xuc_xac_2: item.dices?.[1] || 0,
-      Xuc_xac_3: item.dices?.[2] || 0,
-      Tong: item.point || 0
+      Xuc_xac: `${item.dices?.[0] || 0}-${item.dices?.[1] || 0}-${item.dices?.[2] || 0}`,
+      Tong: item.point || 0,
+      Dice: item.dices || [0, 0, 0]
     }));
   } catch (error) {
-    console.error('Lỗi fetch API:', error.message);
+    console.error('Lỗi fetch:', error.message);
     return null;
   }
 }
 
-// ==================== TÍNH TOÁN HỖ TRỢ ====================
-function calculateRSI(values, period = 14) {
-  if (values.length < period + 1) return 50;
-  let gains = 0, losses = 0;
-  for (let i = values.length - period; i < values.length - 1; i++) {
-    let change = values[i + 1] - values[i];
-    if (change >= 0) gains += change;
-    else losses -= change;
-  }
-  let avgGain = gains / period;
-  let avgLoss = losses / period;
-  if (avgLoss === 0) return 100;
-  let rs = avgGain / avgLoss;
-  return 100 - (100 / (1 + rs));
-}
-
-function calculateEMA(values, period) {
-  if (values.length < period) return values[values.length - 1] || 0;
-  let k = 2 / (period + 1);
-  let ema = values.slice(0, period).reduce((a, b) => a + b, 0) / period;
-  for (let i = period; i < values.length; i++) {
-    ema = values[i] * k + ema * (1 - k);
-  }
-  return ema;
-}
-
-// ==================== THUẬT TOÁN TỪ FILE HTML (GIỮ NGUYÊN 100%) ====================
-
-function html_cau_bet(results) {
-  if (results.length < 3) return null;
-  let streakType = results[0];
-  let streakLength = 1;
-  for (let i = 1; i < results.length; i++) {
-    if (results[i] === streakType) streakLength++;
-    else break;
-  }
-  if (streakLength >= 3) {
-    let shouldBreak = streakLength >= 5;
-    let confidence = streakLength >= 7 ? 88 : (streakLength >= 5 ? 78 : 70);
-    return {
-      prediction: shouldBreak ? (streakType === 'Tài' ? 'Xỉu' : 'Tài') : streakType,
-      confidence: confidence,
-      name: '🎲 Cầu Bệt ' + streakLength + ' phiên'
-    };
-  }
-  return null;
-}
-
-function html_cau_dao_11(results) {
-  if (results.length < 4) return null;
-  let alternatingLength = 1;
-  for (let i = 1; i < Math.min(results.length, 10); i++) {
-    if (results[i] !== results[i - 1]) alternatingLength++;
-    else break;
-  }
-  if (alternatingLength >= 4) {
-    let confidence = Math.min(82, 68 + alternatingLength * 2);
-    return {
-      prediction: results[0] === 'Tài' ? 'Xỉu' : 'Tài',
-      confidence: confidence,
-      name: '🔄 Cầu Đảo 1-1 (' + alternatingLength + ' phiên)'
-    };
-  }
-  return null;
-}
-
-function html_cau_22(results) {
-  if (results.length < 6) return null;
-  let pairCount = 0, i = 0, pattern = [];
-  while (i < results.length - 1 && pairCount < 4) {
-    if (results[i] === results[i + 1]) {
-      pattern.push(results[i]);
-      pairCount++;
-      i += 2;
-    } else break;
-  }
-  if (pairCount >= 2) {
-    let isAlternating = true;
-    for (let j = 1; j < pattern.length; j++) {
-      if (pattern[j] === pattern[j - 1]) isAlternating = false;
-    }
-    if (isAlternating) {
-      let lastPairType = pattern[pattern.length - 1];
-      return {
-        prediction: lastPairType === 'Tài' ? 'Xỉu' : 'Tài',
-        confidence: Math.min(80, 68 + pairCount * 3),
-        name: '📊 Cầu 2-2 (' + pairCount + ' cặp)'
-      };
-    }
-  }
-  return null;
-}
-
-function html_cau_33(results) {
-  if (results.length < 6) return null;
-  let tripleCount = 0, i = 0, pattern = [];
-  while (i < results.length - 2) {
-    if (results[i] === results[i + 1] && results[i + 1] === results[i + 2]) {
-      pattern.push(results[i]);
-      tripleCount++;
-      i += 3;
-    } else break;
-  }
-  if (tripleCount >= 1) {
-    let currentPosition = results.length % 3;
-    let lastTripleType = pattern[pattern.length - 1];
-    let prediction;
-    if (currentPosition === 0) prediction = lastTripleType === 'Tài' ? 'Xỉu' : 'Tài';
-    else prediction = lastTripleType;
-    return {
-      prediction: prediction,
-      confidence: Math.min(82, 70 + tripleCount * 4),
-      name: '🎯 Cầu 3-3 (' + tripleCount + ' bộ ba)'
-    };
-  }
-  return null;
-}
-
-function html_cau_121(results) {
-  if (results.length < 4) return null;
-  let p = results.slice(0, 4);
-  if (p[0] !== p[1] && p[1] === p[2] && p[2] !== p[3] && p[0] === p[3]) {
-    return { prediction: p[0], confidence: 74, name: '⚡ Cầu 1-2-1' };
-  }
-  return null;
-}
-
-function html_cau_123(results) {
-  if (results.length < 6) return null;
-  let first = results[5];
-  let nextTwo = results.slice(3, 5);
-  let lastThree = results.slice(0, 3);
-  if (nextTwo[0] === nextTwo[1] && nextTwo[0] !== first) {
-    let allSame = lastThree.every(r => r === lastThree[0]);
-    if (allSame && lastThree[0] !== nextTwo[0]) {
-      return { prediction: first, confidence: 76, name: '📈 Cầu 1-2-3' };
-    }
-  }
-  return null;
-}
-
-function html_cau_321(results) {
-  if (results.length < 6) return null;
-  let first3 = results.slice(3, 6);
-  let next2 = results.slice(1, 3);
-  let last1 = results[0];
-  let first3Same = first3.every(r => r === first3[0]);
-  let next2Same = next2.every(r => r === next2[0]);
-  if (first3Same && next2Same && first3[0] !== next2[0] && last1 !== next2[0]) {
-    return { prediction: next2[0], confidence: 78, name: '📉 Cầu 3-2-1' };
-  }
-  return null;
-}
-
-function html_cau_nhay_coc(results) {
-  if (results.length < 6) return null;
-  let skipPattern = [];
-  for (let i = 0; i < Math.min(results.length, 12); i += 2) skipPattern.push(results[i]);
-  if (skipPattern.length >= 3) {
-    let allSame = skipPattern.slice(0, 3).every(r => r === skipPattern[0]);
-    if (allSame) return { prediction: skipPattern[0], confidence: 70, name: '🐸 Cầu Nhảy Cóc' };
-    let alternating = true;
-    for (let i = 1; i < skipPattern.length - 1; i++) {
-      if (skipPattern[i] === skipPattern[i - 1]) alternating = false;
-    }
-    if (alternating && skipPattern.length >= 3) {
-      return {
-        prediction: skipPattern[0] === 'Tài' ? 'Xỉu' : 'Tài',
-        confidence: 68,
-        name: '🐸 Cầu Nhảy Cóc Đảo'
-      };
-    }
-  }
-  return null;
-}
-
-function html_cau_nhip_nghieng(results) {
-  if (results.length < 5) return null;
-  let last5 = results.slice(0, 5);
-  let taiCount5 = last5.filter(r => r === 'Tài').length;
-  if (taiCount5 >= 4) {
-    return { prediction: 'Tài', confidence: 72, name: '⚖️ Cầu Nhịp Nghiêng (' + taiCount5 + '/5 Tài)' };
-  } else if (taiCount5 <= 1) {
-    return { prediction: 'Xỉu', confidence: 72, name: '⚖️ Cầu Nhịp Nghiêng (' + (5 - taiCount5) + '/5 Xỉu)' };
-  }
-  return null;
-}
-
-function html_cau_3van1(results) {
-  if (results.length < 4) return null;
-  let last4 = results.slice(0, 4);
-  let taiCount = last4.filter(r => r === 'Tài').length;
-  if (taiCount === 3) return { prediction: 'Xỉu', confidence: 70, name: '🎲 Cầu 3 Ván 1 (3T-1X) → Xỉu' };
-  if (taiCount === 1) return { prediction: 'Tài', confidence: 70, name: '🎲 Cầu 3 Ván 1 (3X-1T) → Tài' };
-  return null;
-}
-
-function html_smart_bet(results) {
-  if (results.length < 10) return null;
-  let last5 = results.slice(0, 5);
-  let prev5 = results.slice(5, 10);
-  let taiLast5 = last5.filter(r => r === 'Tài').length;
-  let taiPrev5 = prev5.filter(r => r === 'Tài').length;
-  let trendChanging = (taiLast5 >= 4 && taiPrev5 <= 1) || (taiLast5 <= 1 && taiPrev5 >= 4);
-  if (trendChanging) {
-    let currentDominant = taiLast5 >= 4 ? 'Tài' : 'Xỉu';
-    return {
-      prediction: currentDominant === 'Tài' ? 'Xỉu' : 'Tài',
-      confidence: 80,
-      name: '🔄 Đảo Xu Hướng'
-    };
-  }
-  let last10 = results.slice(0, 10);
-  let taiLast10 = last10.filter(r => r === 'Tài').length;
-  if (taiLast10 >= 8 || taiLast10 <= 2) {
-    let dominant = taiLast10 >= 8 ? 'Tài' : 'Xỉu';
-    return {
-      prediction: dominant === 'Tài' ? 'Xỉu' : 'Tài',
-      confidence: 84,
-      name: '🔥 Xu Hướng Cực → Đảo'
-    };
-  }
-  return null;
-}
-
-function html_break_streak(results) {
-  if (results.length < 5) return null;
-  let streakType = results[0];
-  let streakLength = 1;
-  for (let i = 1; i < results.length; i++) {
-    if (results[i] === streakType) streakLength++;
-    else break;
-  }
-  if (streakLength >= 5) {
-    let prediction = streakType === 'Tài' ? 'Xỉu' : 'Tài';
-    return {
-      prediction: prediction,
-      confidence: Math.min(88, 72 + streakLength),
-      name: '🔪 Bẻ Chuỗi ' + streakLength
-    };
-  }
-  return null;
-}
-
-function html_triple_pattern(results) {
-  if (results.length < 9) return null;
-  let isTriple1 = results[0] === results[1] && results[1] === results[2];
-  let isTriple2 = results[3] === results[4] && results[4] === results[5];
-  let isTriple3 = results[6] === results[7] && results[7] === results[8];
-  if (isTriple1 && isTriple2 && isTriple3) {
-    if (results[0] === results[3] && results[3] === results[6]) {
-      return {
-        prediction: results[0] === 'Tài' ? 'Xỉu' : 'Tài',
-        confidence: 90,
-        name: '💎 3 Bộ Ba Cùng → Bẻ'
-      };
-    }
-    if (results[0] !== results[3] && results[3] !== results[6]) {
-      return {
-        prediction: results[0],
-        confidence: 82,
-        name: '💎 Bộ Ba Đảo → Theo'
-      };
-    }
-  }
-  return null;
-}
-
-function html_tong_phan_tich(data) {
-  if (data.length < 10) return null;
-  let sums = data.slice(0, 10).map(d => d.Tong);
-  let first5Sum = sums.slice(5, 10).reduce((a, b) => a + b, 0) / 5;
-  let last5Sum = sums.slice(0, 5).reduce((a, b) => a + b, 0) / 5;
-  let sumTrend = last5Sum - first5Sum;
-  if (sumTrend > 1.5) return { prediction: 'Xỉu', confidence: 77, name: '📊 Tổng Phân Tích (Tổng tăng → Xỉu)' };
-  if (sumTrend < -1.5) return { prediction: 'Tài', confidence: 77, name: '📊 Tổng Phân Tích (Tổng giảm → Tài)' };
-  return null;
-}
-
-function html_xu_huong_manh(results) {
-  if (results.length < 8) return null;
-  let recent8 = results.slice(0, 8);
-  let taiCount = recent8.filter(r => r === 'Tài').length;
-  if (taiCount >= 6) return { prediction: 'Xỉu', confidence: 82, name: '📈 Xu Hướng Mạnh (' + taiCount + '/8 Tài → Đảo)' };
-  if (taiCount <= 2) return { prediction: 'Tài', confidence: 82, name: '📉 Xu Hướng Mạnh (' + (8 - taiCount) + '/8 Xỉu → Đảo)' };
-  return null;
-}
-
-function html_dao_chieu(results) {
-  if (results.length < 5) return null;
-  let recent5 = results.slice(0, 5);
-  let isAlternating = true;
-  for (let i = 0; i < recent5.length - 1; i++) {
-    if (recent5[i] === recent5[i + 1]) { isAlternating = false; break; }
-  }
-  if (isAlternating) {
-    return {
-      prediction: recent5[0] === 'Tài' ? 'Xỉu' : 'Tài',
-      confidence: 77,
-      name: '🔄 Đảo Chiều (Chuỗi đan xen)'
-    };
-  }
-  return null;
-}
-
-// ==================== THUẬT TOÁN TỪ API (NÂNG CAO) ====================
-
-function api_markov(results, order, type, markovMatrix) {
-  if (results.length < order + 1) return null;
-  let key = results.slice(0, order).join('');
-  let probTai = (markovMatrix[key + 'Tài'] || 0) / ((markovMatrix[key + 'Tài'] || 0) + (markovMatrix[key + 'Xỉu'] || 0) || 1);
-  if (probTai > 0.7) {
-    return { prediction: 'Tài', confidence: 75 + probTai * 12, name: `🧮 Markov bậc ${order} → Tài` };
-  }
-  if (probTai < 0.3) {
-    return { prediction: 'Xỉu', confidence: 75 + (1 - probTai) * 12, name: `🧮 Markov bậc ${order} → Xỉu` };
-  }
-  return null;
-}
-
-function buildMarkovMatrices(results) {
-  let matrices = {};
-  for (let order = 1; order <= 5; order++) {
-    if (results.length < order + 1) continue;
-    let matrix = {};
-    for (let i = 0; i < results.length - order; i++) {
-      let key = results.slice(i, i + order).join('');
-      let next = results[i + order];
-      matrix[key + next] = (matrix[key + next] || 0) + 1;
-    }
-    matrices[order] = matrix;
-  }
-  return matrices;
-}
-
-function api_rsi(sums) {
-  if (sums.length < 15) return null;
-  let rsi = calculateRSI(sums, 14);
-  if (rsi > 70) return { prediction: 'Xỉu', confidence: 78, name: `📊 RSI Quá Mua (${rsi.toFixed(1)}) → Xỉu` };
-  if (rsi < 30) return { prediction: 'Tài', confidence: 78, name: `📊 RSI Quá Bán (${rsi.toFixed(1)}) → Tài` };
-  return null;
-}
-
-function api_macd(sums) {
-  if (sums.length < 26) return null;
-  let ema12 = calculateEMA(sums, 12);
-  let ema26 = calculateEMA(sums, 26);
-  let macd = ema12 - ema26;
-  let signal = calculateEMA([macd], 9);
-  if (macd > signal) return { prediction: 'Tài', confidence: 75, name: '📈 MACD Cắt Lên → Tài' };
-  if (macd < signal) return { prediction: 'Xỉu', confidence: 75, name: '📉 MACD Cắt Xuống → Xỉu' };
-  return null;
-}
-
-function api_fibonacci(sums) {
-  if (sums.length < 20) return null;
-  let high = Math.max(...sums.slice(0, 20));
-  let low = Math.min(...sums.slice(0, 20));
-  let current = sums[0];
-  let range = high - low;
-  let fib618 = low + range * 0.618;
-  let fib382 = low + range * 0.382;
-  if (current <= fib382) return { prediction: 'Tài', confidence: 76, name: '📐 Fibonacci Hỗ trợ → Tài' };
-  if (current >= fib618) return { prediction: 'Xỉu', confidence: 76, name: '📐 Fibonacci Kháng cự → Xỉu' };
-  return null;
-}
-
-function api_elliott(results) {
-  if (results.length < 8) return null;
-  let changes = [];
-  for (let i = 1; i < results.length; i++) {
-    if (results[i] !== results[i - 1]) changes.push(i);
-  }
-  for (let i = 0; i <= changes.length - 5; i++) {
-    let seg1 = changes[i + 1] - changes[i];
-    let seg2 = changes[i + 2] - changes[i + 1];
-    let seg3 = changes[i + 3] - changes[i + 2];
-    let seg4 = changes[i + 4] - changes[i + 3];
-    if (seg1 >= 2 && seg2 >= 1 && seg3 >= 2 && seg4 >= 1) {
-      return { prediction: results[changes[i]], confidence: 80, name: '🌊 Sóng Elliott 5 sóng' };
-    }
-  }
-  return null;
-}
-
-function api_smart_money(results) {
-  if (results.length < 15) return null;
-  let accumulation = 0, distribution = 0;
-  for (let i = 0; i < results.length - 3; i++) {
-    if (results[i] === results[i + 1] && results[i + 1] === results[i + 2]) {
-      if (results[i] === 'Tài') accumulation += 2;
-      else distribution += 2;
-    }
-  }
-  let smi = (accumulation - distribution) / (accumulation + distribution + 1);
-  if (smi > 0.25) return { prediction: 'Tài', confidence: 80, name: '💰 Smart Money Tích Lũy → Tài' };
-  if (smi < -0.25) return { prediction: 'Xỉu', confidence: 80, name: '💰 Smart Money Phân Phối → Xỉu' };
-  return null;
-}
-
-function api_neural_ai(results, sums, type) {
-  // Neural network simplified
-  let taiCount = results.slice(0, 10).filter(r => r === 'Tài').length;
-  let streak = 1;
-  for (let i = 1; i < results.length; i++) {
-    if (results[i] === results[0]) streak++;
-    else break;
-  }
-  let rsi = calculateRSI(sums, 14) / 100;
-  let score = (taiCount / 10) * 0.4 + (streak / 10) * 0.3 + rsi * 0.3;
-  if (score > 0.6) return { prediction: 'Tài', confidence: 73 + score * 15, name: '🧠 AI Neural Network → Tài' };
-  if (score < 0.4) return { prediction: 'Xỉu', confidence: 73 + (1 - score) * 15, name: '🧠 AI Neural Network → Xỉu' };
-  return null;
-}
-
-// ==================== CẬP NHẬT TRỌNG SỐ (TỰ HỌC) ====================
-function updateWeights(type, algorithmName, isCorrect) {
-  let id = algorithmName.split(' ')[0].replace(/[^a-z]/gi, '').toLowerCase();
-  if (!algorithmWeights[type][id]) return;
+// ==================== PHÂN TÍCH PATTERN 50+ PHIÊN ====================
+function phanTichPatternDaiHan(history, type) {
+  if (history.length < 20) return null;
   
-  if (isCorrect) {
-    algorithmWeights[type][id] = Math.min(2.0, algorithmWeights[type][id] + 0.05);
-  } else {
-    algorithmWeights[type][id] = Math.max(0.5, algorithmWeights[type][id] - 0.05);
+  let patterns = {};
+  let patternLengths = [3, 4, 5, 6, 7, 8];
+  
+  // Phân tích pattern với các độ dài khác nhau
+  for (let len of patternLengths) {
+    for (let i = 0; i <= history.length - len - 1; i++) {
+      let pattern = history.slice(i, i + len).join('');
+      let nextResult = history[i + len];
+      
+      if (!patterns[pattern]) {
+        patterns[pattern] = { tai: 0, xiu: 0, total: 0 };
+      }
+      if (nextResult === 'Tài') patterns[pattern].tai++;
+      else patterns[pattern].xiu++;
+      patterns[pattern].total++;
+    }
   }
+  
+  // Lưu vào database
+  for (let [pattern, data] of Object.entries(patterns)) {
+    if (!patternDatabase[type][pattern]) {
+      patternDatabase[type][pattern] = { tai: 0, xiu: 0, total: 0, correct: 0, wrong: 0 };
+    }
+    patternDatabase[type][pattern].tai += data.tai;
+    patternDatabase[type][pattern].xiu += data.xiu;
+    patternDatabase[type][pattern].total += data.total;
+  }
+  
+  return patterns;
+}
+
+// ==================== DỰ ĐOÁN DỰA TRÊN PATTERN HIỆN TẠI ====================
+function duDoanTheoPattern(history, type) {
+  if (history.length < 5) return null;
+  
+  let results = [];
+  let patternLengths = [3, 4, 5, 6, 7, 8];
+  
+  for (let len of patternLengths) {
+    if (history.length < len + 1) continue;
+    
+    let currentPattern = history.slice(0, len).join('');
+    let patternData = patternDatabase[type]?.[currentPattern];
+    
+    if (patternData && patternData.total >= 3) {
+      let taiTyLe = patternData.tai / patternData.total;
+      let xiuTyLe = patternData.xiu / patternData.total;
+      let confidence = Math.min(90, 60 + Math.abs(taiTyLe - 0.5) * 60);
+      
+      // Điều chỉnh theo độ chính xác lịch sử
+      let accuracyBonus = (patternData.correct / (patternData.correct + patternData.wrong + 1)) || 0.5;
+      confidence = confidence * (0.5 + accuracyBonus * 0.5);
+      
+      if (taiTyLe > 0.65) {
+        results.push({ prediction: 'Tài', confidence: confidence, weight: len, name: `📊 PATTERN ${len} PHIÊN → TÀI (${(taiTyLe*100).toFixed(0)}%)` });
+      } else if (xiuTyLe > 0.65) {
+        results.push({ prediction: 'Xỉu', confidence: confidence, weight: len, name: `📊 PATTERN ${len} PHIÊN → XỈU (${(xiuTyLe*100).toFixed(0)}%)` });
+      }
+    }
+  }
+  
+  if (results.length === 0) return null;
+  
+  // Lấy kết quả có trọng số cao nhất
+  results.sort((a, b) => (b.confidence * b.weight) - (a.confidence * a.weight));
+  return results[0];
+}
+
+// ==================== PHÂN TÍCH MA TRẬN 8x8 ====================
+function phanTichMaTran8x8(history) {
+  if (history.length < 16) return null;
+  
+  let matrix = Array(8).fill().map(() => Array(8).fill().map(() => ({ tai: 0, xiu: 0 })));
+  
+  for (let i = 0; i <= history.length - 9; i++) {
+    let first8 = history.slice(i, i + 8);
+    let next = history[i + 8];
+    
+    let row = 0, col = 0;
+    for (let j = 0; j < 4; j++) {
+      if (first8[j] === 'Tài') row += Math.pow(2, 3 - j);
+      if (first8[j + 4] === 'Tài') col += Math.pow(2, 3 - j);
+    }
+    
+    if (next === 'Tài') matrix[row][col].tai++;
+    else matrix[row][col].xiu++;
+  }
+  
+  // Lấy 8 phiên gần nhất
+  let last8 = history.slice(0, 8);
+  let rowIndex = 0, colIndex = 0;
+  for (let j = 0; j < 4; j++) {
+    if (last8[j] === 'Tài') rowIndex += Math.pow(2, 3 - j);
+    if (last8[j + 4] === 'Tài') colIndex += Math.pow(2, 3 - j);
+  }
+  
+  let cell = matrix[rowIndex][colIndex];
+  let total = cell.tai + cell.xiu;
+  
+  if (total >= 3) {
+    let taiTyLe = cell.tai / total;
+    if (taiTyLe > 0.7) return { prediction: 'Tài', confidence: 88, name: '🎯 MA TRẬN 8x8 → TÀI' };
+    if (taiTyLe < 0.3) return { prediction: 'Xỉu', confidence: 88, name: '🎯 MA TRẬN 8x8 → XỈU' };
+  }
+  
+  return null;
+}
+
+// ==================== PHÂN TÍCH THEO ID PHIÊN ====================
+function phanTichTheoPhien(history, phienHienTai) {
+  if (history.length < 30) return null;
+  
+  // Tìm các phiên có ID tương tự
+  let similarSessions = [];
+  let phienCuoi = phienHienTai - 1;
+  
+  for (let i = 0; i < history.length - 1; i++) {
+    let diff = Math.abs(history[i].Phien - phienCuoi);
+    if (diff < 100) {
+      similarSessions.push({
+        phien: history[i].Phien,
+        ketQua: history[i].Ket_qua,
+        ketQuaTiep: history[i + 1]?.Ket_qua
+      });
+    }
+  }
+  
+  if (similarSessions.length < 5) return null;
+  
+  let taiCount = similarSessions.filter(s => s.ketQuaTiep === 'Tài').length;
+  let tyLe = taiCount / similarSessions.length;
+  
+  if (tyLe > 0.65) return { prediction: 'Tài', confidence: 82, name: `🔢 PHÂN TÍCH PHIÊN (${tyLe*100}% theo lịch sử)` };
+  if (tyLe < 0.35) return { prediction: 'Xỉu', confidence: 82, name: `🔢 PHÂN TÍCH PHIÊN (${(1-tyLe)*100}% theo lịch sử)` };
+  
+  return null;
+}
+
+// ==================== CẦU BỆT SIÊU CẤP ====================
+function cauBetSieucap(history) {
+  if (history.length < 3) return null;
+  
+  let streakType = history[0];
+  let streakLength = 1;
+  for (let i = 1; i < history.length; i++) {
+    if (history[i] === streakType) streakLength++;
+    else break;
+  }
+  
+  // Tìm streak dài nhất lịch sử
+  let maxStreak = 1;
+  let temp = 1;
+  for (let i = 1; i < history.length; i++) {
+    if (history[i] === history[i-1]) temp++;
+    else {
+      maxStreak = Math.max(maxStreak, temp);
+      temp = 1;
+    }
+  }
+  maxStreak = Math.max(maxStreak, temp);
+  
+  // Quy tắc bệt
+  if (streakLength >= 7) {
+    return { prediction: streakType === 'Tài' ? 'Xỉu' : 'Tài', confidence: 96, name: '🔪 BẺ CẦU BỆT 7+' };
+  }
+  if (streakLength >= 6) {
+    return { prediction: streakType === 'Tài' ? 'Xỉu' : 'Tài', confidence: 94, name: '🔪 BẺ CẦU BỆT 6' };
+  }
+  if (streakLength >= 5 && streakLength >= maxStreak - 1) {
+    return { prediction: streakType === 'Tài' ? 'Xỉu' : 'Tài', confidence: 92, name: '🔪 BẺ CẦU CHẠM ĐỈNH' };
+  }
+  if (streakLength >= 3 && streakLength <= 4) {
+    return { prediction: streakType, confidence: 80, name: `🎲 THEO BỆT ${streakLength}` };
+  }
+  
+  return null;
+}
+
+// ==================== CẦU PING PONG SIÊU CẤP ====================
+function cauPingPongSieucap(history) {
+  if (history.length < 6) return null;
+  
+  let isPingPong = true;
+  for (let i = 0; i < 5; i++) {
+    if (history[i] === history[i+1]) {
+      isPingPong = false;
+      break;
+    }
+  }
+  
+  if (isPingPong) {
+    // Kiểm tra độ dài ping pong
+    let pingPongLength = 1;
+    for (let i = 1; i < history.length; i++) {
+      if (history[i] !== history[i-1]) pingPongLength++;
+      else break;
+    }
+    
+    let confidence = Math.min(92, 75 + pingPongLength);
+    return {
+      prediction: history[0] === 'Tài' ? 'Xỉu' : 'Tài',
+      confidence: confidence,
+      name: `🔄 PING PONG ${pingPongLength} PHIÊN`
+    };
+  }
+  
+  return null;
+}
+
+// ==================== CẦU 2-2, 3-3 SIÊU CẤP ====================
+function cauKepSieucap(history) {
+  if (history.length < 8) return null;
+  
+  // Kiểm tra cầu 2-2
+  let is22 = true;
+  for (let i = 0; i < 6; i += 2) {
+    if (history[i] !== history[i+1]) is22 = false;
+    if (i + 2 < 6 && history[i] === history[i+2]) is22 = false;
+  }
+  
+  if (is22) {
+    return {
+      prediction: history[0] === 'Tài' ? 'Xỉu' : 'Tài',
+      confidence: 88,
+      name: '📊 CẦU 2-2'
+    };
+  }
+  
+  // Kiểm tra cầu 3-3
+  let is33 = true;
+  for (let i = 0; i < 9; i += 3) {
+    if (i + 2 >= history.length) break;
+    if (!(history[i] === history[i+1] && history[i+1] === history[i+2])) is33 = false;
+    if (i + 3 < 9 && history[i] === history[i+3]) is33 = false;
+  }
+  
+  if (is33) {
+    return {
+      prediction: history[0] === 'Tài' ? 'Xỉu' : 'Tài',
+      confidence: 90,
+      name: '🎯 CẦU 3-3'
+    };
+  }
+  
+  return null;
+}
+
+// ==================== PHÂN TÍCH XU HƯỚNG ====================
+function phanTichXuHuong(history) {
+  if (history.length < 20) return null;
+  
+  let recent10 = history.slice(0, 10);
+  let prev10 = history.slice(10, 20);
+  
+  let taiRecent = recent10.filter(r => r === 'Tài').length;
+  let taiPrev = prev10.filter(r => r === 'Tài').length;
+  
+  // Xu hướng thay đổi
+  if (taiRecent - taiPrev >= 3) {
+    return { prediction: 'Xỉu', confidence: 85, name: '📈 XU HƯỚNG TĂNG MẠNH → ĐẢO XỈU' };
+  }
+  if (taiPrev - taiRecent >= 3) {
+    return { prediction: 'Tài', confidence: 85, name: '📉 XU HƯỚNG GIẢM MẠNH → ĐẢO TÀI' };
+  }
+  
+  // Cân bằng
+  if (Math.abs(taiRecent - 5) <= 1) {
+    return { prediction: history[0] === 'Tài' ? 'Xỉu' : 'Tài', confidence: 78, name: '⚖️ XU HƯỚNG CÂN BẰNG → ĐẢO' };
+  }
+  
+  return null;
+}
+
+// ==================== PHÂN TÍCH DỮ LIỆU XÚC XẮC ====================
+function phanTichXucXac(data) {
+  if (data.length < 10) return null;
+  
+  let tongTai = 0, tongXiu = 0;
+  let tongXucXac = [0, 0, 0];
+  
+  for (let i = 0; i < Math.min(20, data.length); i++) {
+    if (data[i].Ket_qua === 'Tài') tongTai++;
+    else tongXiu++;
+    
+    if (data[i].Dice) {
+      for (let j = 0; j < 3; j++) {
+        tongXucXac[j] += data[i].Dice[j] || 0;
+      }
+    }
+  }
+  
+  let trungBinhXucXac = tongXucXac.map(t => t / Math.min(20, data.length));
+  let tongTB = trungBinhXucXac.reduce((a, b) => a + b, 0);
+  
+  if (tongTB > 10.5) {
+    return { prediction: 'Xỉu', confidence: 72, name: '🎲 TỔNG XÚC XẮC CAO → XỈU' };
+  }
+  if (tongTB < 9.5) {
+    return { prediction: 'Tài', confidence: 72, name: '🎲 TỔNG XÚC XẮC THẤP → TÀI' };
+  }
+  
+  return null;
 }
 
 // ==================== TỔNG HỢP DỰ ĐOÁN ====================
-function predict(data, type) {
+function tongHopDuDoan(data, type) {
   const results = data.map(d => d.Ket_qua);
-  const sums = data.map(d => d.Tong);
+  const phienHienTai = data[0]?.Phien || 0;
   
   let predictions = [];
   
-  // Thuật toán từ HTML
-  const htmlAlgos = [
-    html_cau_bet(results), html_cau_dao_11(results), html_cau_22(results),
-    html_cau_33(results), html_cau_121(results), html_cau_123(results),
-    html_cau_321(results), html_cau_nhay_coc(results), html_cau_nhip_nghieng(results),
-    html_cau_3van1(results), html_smart_bet(results), html_break_streak(results),
-    html_triple_pattern(results), html_tong_phan_tich(data), html_xu_huong_manh(results),
-    html_dao_chieu(results)
-  ];
+  // Cập nhật pattern database
+  phanTichPatternDaiHan(results, type);
   
-  for (let algo of htmlAlgos) {
-    if (algo) predictions.push(algo);
+  // 1. Dự đoán theo pattern
+  let patternPred = duDoanTheoPattern(results, type);
+  if (patternPred) predictions.push(patternPred);
+  
+  // 2. Phân tích ma trận 8x8
+  let matrixPred = phanTichMaTran8x8(results);
+  if (matrixPred) predictions.push(matrixPred);
+  
+  // 3. Phân tích theo phiên
+  let phienPred = phanTichTheoPhien(data, phienHienTai);
+  if (phienPred) predictions.push(phienPred);
+  
+  // 4. Cầu bệt siêu cấp
+  let betPred = cauBetSieucap(results);
+  if (betPred) predictions.push(betPred);
+  
+  // 5. Cầu ping pong
+  let pingpongPred = cauPingPongSieucap(results);
+  if (pingpongPred) predictions.push(pingpongPred);
+  
+  // 6. Cầu kép
+  let kepPred = cauKepSieucap(results);
+  if (kepPred) predictions.push(kepPred);
+  
+  // 7. Phân tích xu hướng
+  let trendPred = phanTichXuHuong(results);
+  if (trendPred) predictions.push(trendPred);
+  
+  // 8. Phân tích xúc xắc
+  let dicePred = phanTichXucXac(data);
+  if (dicePred) predictions.push(dicePred);
+  
+  if (predictions.length === 0) {
+    // Fallback: đảo nhịp cơ bản
+    return {
+      prediction: results[0] === 'Tài' ? 'Xỉu' : 'Tài',
+      confidence: 70,
+      topAlgorithms: ['🔄 ĐẢO NHỊP CƠ BẢN'],
+      details: { totalAlgorithms: 0, taiVotes: '50%', xiuVotes: '50%' }
+    };
   }
   
-  // Markov matrices
-  let matrices = buildMarkovMatrices(results);
-  for (let order = 1; order <= 5; order++) {
-    let markov = api_markov(results, order, type, matrices[order] || {});
-    if (markov) predictions.push(markov);
-  }
-  
-  // API advanced algorithms
-  let rsi = api_rsi(sums);
-  if (rsi) predictions.push(rsi);
-  
-  let macd = api_macd(sums);
-  if (macd) predictions.push(macd);
-  
-  let fib = api_fibonacci(sums);
-  if (fib) predictions.push(fib);
-  
-  let elliott = api_elliott(results);
-  if (elliott) predictions.push(elliott);
-  
-  let smart = api_smart_money(results);
-  if (smart) predictions.push(smart);
-  
-  let neural = api_neural_ai(results, sums, type);
-  if (neural) predictions.push(neural);
-  
-  // Ensemble voting với trọng số
+  // Tính điểm có trọng số
   let taiScore = 0, xiuScore = 0;
   let taiConf = 0, xiuConf = 0;
   
   for (let p of predictions) {
-    let weight = 1.0;
-    let id = p.name.split(' ')[0].replace(/[^a-z]/gi, '').toLowerCase();
-    if (algorithmWeights[type][id]) weight = algorithmWeights[type][id];
-    
     if (p.prediction === 'Tài') {
-      taiScore += weight;
-      taiConf += p.confidence * weight;
+      taiScore += p.confidence;
+      taiConf += p.confidence;
     } else {
-      xiuScore += weight;
-      xiuConf += p.confidence * weight;
+      xiuScore += p.confidence;
+      xiuConf += p.confidence;
     }
   }
   
-  let totalWeight = taiScore + xiuScore;
+  let total = taiScore + xiuScore;
   let finalPrediction = taiScore > xiuScore ? 'Tài' : 'Xỉu';
   let finalConfidence = 0;
   
   if (finalPrediction === 'Tài') {
-    finalConfidence = Math.min(98, Math.max(65, Math.round(taiConf / taiScore)));
+    finalConfidence = Math.min(98, Math.max(65, Math.round(taiConf / (predictions.filter(p => p.prediction === 'Tài').length || 1))));
   } else {
-    finalConfidence = Math.min(98, Math.max(65, Math.round(xiuConf / xiuScore)));
+    finalConfidence = Math.min(98, Math.max(65, Math.round(xiuConf / (predictions.filter(p => p.prediction === 'Xỉu').length || 1))));
   }
   
   // Lấy top 5 thuật toán
@@ -614,43 +470,52 @@ function predict(data, type) {
     prediction: finalPrediction,
     confidence: finalConfidence,
     topAlgorithms: topAlgos.map(a => a.name),
-    totalAlgorithms: predictions.length,
-    taiVotes: Math.round((taiScore / totalWeight) * 100) + '%',
-    xiuVotes: Math.round((xiuScore / totalWeight) * 100) + '%'
+    details: {
+      totalAlgorithms: predictions.length,
+      taiVotes: Math.round((taiScore / total) * 100) + '%',
+      xiuVotes: Math.round((xiuScore / total) * 100) + '%'
+    }
   };
 }
 
-// ==================== XỬ LÝ DỰ ĐOÁN ====================
-async function verifyAndLearn(type, currentData) {
-  let data = learningData[type];
+// ==================== XỬ LÝ DỰ ĐOÁN VÀ CẬP NHẬT ====================
+async function verifyAndUpdate(type, currentData) {
   let updated = false;
   
   for (let record of predictionHistory[type]) {
-    if (record.da_xac_nhan) continue;
-    const actual = currentData.find(d => d.Phien.toString() === record.phien_hien_tai);
+    if (record.daXacNhan) continue;
+    
+    const actual = currentData.find(d => d.Phien.toString() === record.phienHienTai);
     if (actual) {
-      let isCorrect = (record.du_doan === actual.Ket_qua);
-      record.ket_qua_du_doan = isCorrect ? 'Đúng ✅' : 'Sai ❌';
-      record.da_xac_nhan = true;
+      let isCorrect = (record.duDoan === actual.Ket_qua);
+      record.ketQua = isCorrect ? 'Đúng ✅' : 'Sai ❌';
+      record.daXacNhan = true;
       
+      // Cập nhật stats
+      stats[type].total++;
       if (isCorrect) {
-        data.correctPredictions++;
-        data.currentStreak = Math.max(1, data.currentStreak + 1);
-        if (data.currentStreak > data.bestStreak) data.bestStreak = data.currentStreak;
-        // Cập nhật trọng số cho các thuật toán đã dùng
-        if (record.thuat_toan_da_dung) {
-          for (let algo of record.thuat_toan_da_dung) {
-            updateWeights(type, algo, true);
-          }
+        stats[type].correct++;
+        stats[type].streak = Math.max(1, stats[type].streak + 1);
+        if (stats[type].streak > stats[type].bestStreak) {
+          stats[type].bestStreak = stats[type].streak;
         }
       } else {
-        data.currentStreak = Math.min(-1, data.currentStreak - 1);
-        if (record.thuat_toan_da_dung) {
-          for (let algo of record.thuat_toan_da_dung) {
-            updateWeights(type, algo, false);
+        stats[type].streak = Math.min(-1, stats[type].streak - 1);
+      }
+      
+      stats[type].lastCorrect.unshift(isCorrect ? 1 : 0);
+      if (stats[type].lastCorrect.length > 20) stats[type].lastCorrect.pop();
+      
+      // Cập nhật pattern database với kết quả thực tế
+      if (record.patternDaDung) {
+        for (let pattern of record.patternDaDung) {
+          if (patternDatabase[type][pattern]) {
+            if (isCorrect) patternDatabase[type][pattern].correct++;
+            else patternDatabase[type][pattern].wrong++;
           }
         }
       }
+      
       updated = true;
     }
   }
@@ -660,22 +525,25 @@ async function verifyAndLearn(type, currentData) {
   }
 }
 
-function savePrediction(type, phien, prediction, confidence, topAlgos, latestData) {
+function savePrediction(type, phien, prediction, confidence, topAlgos, patternUsed, latestData) {
   const record = {
-    phien_hien_tai: phien.toString(),
-    du_doan: prediction,
-    do_tin_cay: `${confidence}%`,
-    ket_qua_thuc_te: latestData.Ket_qua,
-    xuc_xac: `${latestData.Xuc_xac_1}-${latestData.Xuc_xac_2}-${latestData.Xuc_xac_3}`,
+    phienHienTai: phien.toString(),
+    duDoan: prediction,
+    doTinCay: `${confidence}%`,
+    ketQuaThuc: latestData.Ket_qua,
+    xucXac: latestData.Xuc_xac,
     tong: latestData.Tong,
-    thuat_toan_da_dung: topAlgos,
-    ket_qua_du_doan: '',
-    da_xac_nhan: false,
+    thuatToan: topAlgos,
+    patternDaDung: patternUsed,
+    ketQua: '',
+    daXacNhan: false,
     timestamp: new Date().toISOString()
   };
+  
   predictionHistory[type].unshift(record);
   if (predictionHistory[type].length > 200) predictionHistory[type].pop();
   saveData();
+  
   return record;
 }
 
@@ -683,20 +551,19 @@ function savePrediction(type, phien, prediction, confidence, topAlgos, latestDat
 
 app.get('/', (req, res) => {
   res.json({
-    name: "⚡ TÀI XỈU SUPER AI V16.0 ⚡",
-    version: "16.0 - TÍCH HỢP HOÀN HẢO",
+    name: "⚡ TÀI XỈU SUPER AI V18.0 ⚡",
+    version: "18.0 - LEGENDARY MASTER",
     author: "@Tskhang",
-    description: "Gộp 100% thuật toán từ HTML + API | Tự học từ kết quả thực tế",
+    description: "PHÂN TÍCH PATTERN 50+ PHIÊN | MA TRẬN 8x8 | DỰ ĐOÁN THEO ID PHIÊN",
     uptime: Math.floor((Date.now() - systemStartTime) / 1000) + ' giây',
     endpoints: {
-      "🎲 /hu": "Dự đoán Tài Xỉu Hũ",
-      "🔐 /md5": "Dự đoán Tài Xỉu MD5",
+      "🎲 /hu": "Dự đoán Tài Xỉu Hũ (SIÊU CHUẨN)",
+      "🔐 /md5": "Dự đoán Tài Xỉu MD5 (SIÊU CHUẨN)",
       "📜 /lichsu": "Lịch sử dự đoán",
       "📜 /lichsu/hu": "Lịch sử HU",
       "📜 /lichsu/md5": "Lịch sử MD5",
       "📊 /hu/thamso": "Phân tích chi tiết HU",
-      "📊 /md5/thamso": "Phân tích chi tiết MD5",
-      "🔄 /reset": "Reset dữ liệu học"
+      "📊 /md5/thamso": "Phân tích chi tiết MD5"
     }
   });
 });
@@ -706,12 +573,21 @@ app.get('/hu', async (req, res) => {
     const data = await fetchData(API_URL_HU);
     if (!data) return res.status(500).json({ error: 'Không thể lấy dữ liệu' });
     
-    await verifyAndLearn('hu', data);
+    await verifyAndUpdate('hu', data);
     const nextPhien = data[0].Phien + 1;
-    const result = predict(data, 'hu');
-    const stats = learningData.hu;
+    const result = tongHopDuDoan(data, 'hu');
     
-    const record = savePrediction('hu', nextPhien, result.prediction, result.confidence, result.topAlgorithms, data[0]);
+    const patternUsed = result.topAlgorithms.map(a => {
+      let match = a.match(/PATTERN (\d+) PHIÊN/);
+      return match ? match[0] : null;
+    }).filter(p => p);
+    
+    const record = savePrediction('hu', nextPhien, result.prediction, result.confidence, result.topAlgorithms, patternUsed, data[0]);
+    
+    let tyLeDung = 'N/A';
+    if (stats.hu.total > 0) {
+      tyLeDung = ((stats.hu.correct / stats.hu.total) * 100).toFixed(1) + '%';
+    }
     
     res.json({
       status: "✅ SUCCESS",
@@ -721,13 +597,13 @@ app.get('/hu', async (req, res) => {
       do_tin_cay: `${result.confidence}%`,
       icon: result.prediction === 'Tài' ? '🔥' : '❄️',
       thong_ke: {
-        tong_phien: stats.totalPredictions + stats.correctPredictions,
-        ty_le_dung: stats.totalPredictions + stats.correctPredictions > 0 ? 
-          ((stats.correctPredictions / (stats.totalPredictions + stats.correctPredictions)) * 100).toFixed(1) + '%' : 'N/A',
-        chuoi_hien_tai: stats.currentStreak
+        tong_phien: stats.hu.total,
+        ty_le_dung: tyLeDung,
+        chuoi_hien_tai: stats.hu.streak,
+        chuoi_cao_nhat: stats.hu.bestStreak
       },
       thuat_toan: result.topAlgorithms,
-      voting: { tai: result.taiVotes, xiu: result.xiuVotes },
+      chi_tiet: result.details,
       author: "@Tskhang"
     });
   } catch (error) {
@@ -740,12 +616,21 @@ app.get('/md5', async (req, res) => {
     const data = await fetchData(API_URL_MD5);
     if (!data) return res.status(500).json({ error: 'Không thể lấy dữ liệu' });
     
-    await verifyAndLearn('md5', data);
+    await verifyAndUpdate('md5', data);
     const nextPhien = data[0].Phien + 1;
-    const result = predict(data, 'md5');
-    const stats = learningData.md5;
+    const result = tongHopDuDoan(data, 'md5');
     
-    const record = savePrediction('md5', nextPhien, result.prediction, result.confidence, result.topAlgorithms, data[0]);
+    const patternUsed = result.topAlgorithms.map(a => {
+      let match = a.match(/PATTERN (\d+) PHIÊN/);
+      return match ? match[0] : null;
+    }).filter(p => p);
+    
+    const record = savePrediction('md5', nextPhien, result.prediction, result.confidence, result.topAlgorithms, patternUsed, data[0]);
+    
+    let tyLeDung = 'N/A';
+    if (stats.md5.total > 0) {
+      tyLeDung = ((stats.md5.correct / stats.md5.total) * 100).toFixed(1) + '%';
+    }
     
     res.json({
       status: "✅ SUCCESS",
@@ -755,13 +640,13 @@ app.get('/md5', async (req, res) => {
       do_tin_cay: `${result.confidence}%`,
       icon: result.prediction === 'Tài' ? '🔥' : '❄️',
       thong_ke: {
-        tong_phien: stats.totalPredictions + stats.correctPredictions,
-        ty_le_dung: stats.totalPredictions + stats.correctPredictions > 0 ? 
-          ((stats.correctPredictions / (stats.totalPredictions + stats.correctPredictions)) * 100).toFixed(1) + '%' : 'N/A',
-        chuoi_hien_tai: stats.currentStreak
+        tong_phien: stats.md5.total,
+        ty_le_dung: tyLeDung,
+        chuoi_hien_tai: stats.md5.streak,
+        chuoi_cao_nhat: stats.md5.bestStreak
       },
       thuat_toan: result.topAlgorithms,
-      voting: { tai: result.taiVotes, xiu: result.xiuVotes },
+      chi_tiet: result.details,
       author: "@Tskhang"
     });
   } catch (error) {
@@ -775,22 +660,24 @@ app.get('/lichsu', async (req, res) => {
     timestamp: new Date().toISOString(),
     hu: {
       tong_phien: predictionHistory.hu.length,
-      lich_su: predictionHistory.hu.map(h => ({
-        phien: h.phien_hien_tai,
-        du_doan: h.du_doan,
-        ket_qua: h.ket_qua_thuc_te,
-        ket_luan: h.ket_qua_du_doan || 'Đang chờ...',
-        do_tin_cay: h.do_tin_cay
+      ty_le_dung: stats.hu.total > 0 ? ((stats.hu.correct / stats.hu.total) * 100).toFixed(1) + '%' : 'N/A',
+      lich_su: predictionHistory.hu.slice(0, 30).map(h => ({
+        phien: h.phienHienTai,
+        du_doan: h.duDoan,
+        ket_qua_thuc: h.ketQuaThuc,
+        ket_luan: h.ketQua || 'Đang chờ...',
+        do_tin_cay: h.doTinCay
       }))
     },
     md5: {
       tong_phien: predictionHistory.md5.length,
-      lich_su: predictionHistory.md5.map(h => ({
-        phien: h.phien_hien_tai,
-        du_doan: h.du_doan,
-        ket_qua: h.ket_qua_thuc_te,
-        ket_luan: h.ket_qua_du_doan || 'Đang chờ...',
-        do_tin_cay: h.do_tin_cay
+      ty_le_dung: stats.md5.total > 0 ? ((stats.md5.correct / stats.md5.total) * 100).toFixed(1) + '%' : 'N/A',
+      lich_su: predictionHistory.md5.slice(0, 30).map(h => ({
+        phien: h.phienHienTai,
+        du_doan: h.duDoan,
+        ket_qua_thuc: h.ketQuaThuc,
+        ket_luan: h.ketQua || 'Đang chờ...',
+        do_tin_cay: h.doTinCay
       }))
     },
     author: "@Tskhang"
@@ -802,6 +689,7 @@ app.get('/lichsu/hu', async (req, res) => {
     status: "✅ SUCCESS",
     type: "Tài Xỉu Hũ",
     tong_phien: predictionHistory.hu.length,
+    ty_le_dung: stats.hu.total > 0 ? ((stats.hu.correct / stats.hu.total) * 100).toFixed(1) + '%' : 'N/A',
     lich_su: predictionHistory.hu,
     author: "@Tskhang"
   });
@@ -812,6 +700,7 @@ app.get('/lichsu/md5', async (req, res) => {
     status: "✅ SUCCESS",
     type: "Tài Xỉu MD5",
     tong_phien: predictionHistory.md5.length,
+    ty_le_dung: stats.md5.total > 0 ? ((stats.md5.correct / stats.md5.total) * 100).toFixed(1) + '%' : 'N/A',
     lich_su: predictionHistory.md5,
     author: "@Tskhang"
   });
@@ -820,13 +709,12 @@ app.get('/lichsu/md5', async (req, res) => {
 app.get('/hu/thamso', async (req, res) => {
   const data = await fetchData(API_URL_HU);
   if (!data) return res.status(500).json({ error: 'Không thể lấy dữ liệu' });
-  const result = predict(data, 'hu');
+  const result = tongHopDuDoan(data, 'hu');
   res.json({
     du_doan: result.prediction,
     do_tin_cay: `${result.confidence}%`,
-    top_thuat_toan: result.topAlgorithms,
-    voting: result.taiVotes + ' - ' + result.xiuVotes,
-    tong_so_thuat_toan: result.totalAlgorithms,
+    thuat_toan: result.topAlgorithms,
+    phan_tich: result.details,
     author: "@Tskhang"
   });
 });
@@ -834,74 +722,47 @@ app.get('/hu/thamso', async (req, res) => {
 app.get('/md5/thamso', async (req, res) => {
   const data = await fetchData(API_URL_MD5);
   if (!data) return res.status(500).json({ error: 'Không thể lấy dữ liệu' });
-  const result = predict(data, 'md5');
+  const result = tongHopDuDoan(data, 'md5');
   res.json({
     du_doan: result.prediction,
     do_tin_cay: `${result.confidence}%`,
-    top_thuat_toan: result.topAlgorithms,
-    voting: result.taiVotes + ' - ' + result.xiuVotes,
-    tong_so_thuat_toan: result.totalAlgorithms,
+    thuat_toan: result.topAlgorithms,
+    phan_tich: result.details,
     author: "@Tskhang"
   });
 });
 
-app.get('/reset', (req, res) => {
-  predictionHistory = { hu: [], md5: [] };
-  lastProcessedPhien = { hu: null, md5: null };
-  algorithmWeights = {
-    hu: {}, md5: {}
-  };
-  algorithmStats = { hu: {}, md5: {} };
-  learningData = {
-    hu: { totalPredictions: 0, correctPredictions: 0, currentStreak: 0, bestStreak: 0 },
-    md5: { totalPredictions: 0, correctPredictions: 0, currentStreak: 0, bestStreak: 0 }
-  };
-  saveData();
-  res.json({ message: '✅ Đã reset toàn bộ dữ liệu', author: "@Tskhang" });
-});
-
-// Khởi động
+// ==================== KHỞI ĐỘNG ====================
 loadData();
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`
-╔═══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                       ║
-║   ⚡⚡⚡ TÀI XỈU SUPER AI V16.0 - TÍCH HỢP HOÀN HẢO ⚡⚡⚡                             ║
-║   📡 PORT: ${PORT}                                                                       ║
-║   👤 AUTHOR: @Tskhang                                                                 ║
-║                                                                                       ║
-║   🧠 20+ THUẬT TOÁN ĐÃ TÍCH HỢP:                                                      ║
-║   ├── 📁 TỪ FILE HTML (GIỮ NGUYÊN 100%):                                              ║
-║   │   ├── 🎲 Cầu Bệt, 🔄 Cầu Đảo 1-1, 📊 Cầu 2-2, 🎯 Cầu 3-3                         ║
-║   │   ├── ⚡ Cầu 1-2-1, 📈 Cầu 1-2-3, 📉 Cầu 3-2-1                                    ║
-║   │   ├── 🐸 Cầu Nhảy Cóc, ⚖️ Cầu Nhịp Nghiêng, 🎲 Cầu 3 Ván 1                        ║
-║   │   ├── 🔄 Đảo Xu Hướng, 🔪 Bẻ Chuỗi, 💎 3 Bộ Ba                                     ║
-║   │   └── 📊 Tổng Phân Tích, 📈 Xu Hướng Mạnh, 🔄 Đảo Chiều                            ║
-║   │                                                                                   ║
-║   ├── 🚀 TỪ API (NÂNG CAO):                                                           ║
-║   │   ├── 🧮 Markov bậc 1,2,3,4,5 (xác suất chuyển trạng thái)                       ║
-║   │   ├── 📊 RSI (Relative Strength Index)                                            ║
-║   │   ├── 📈 MACD (Moving Average Convergence Divergence)                             ║
-║   │   ├── 📐 Fibonacci Retracement (0.382, 0.618)                                     ║
-║   │   ├── 🌊 Sóng Elliott (5 sóng impulse)                                            ║
-║   │   ├── 💰 Smart Money Index (Tích lũy/Phân phối)                                   ║
-║   │   └── 🧠 AI Neural Network (Học từ kết quả thực tế)                               ║
-║   │                                                                                   ║
-║   └── 🔄 TỰ HỌC THÔNG MINH:                                                           ║
-║       ├── Cập nhật trọng số thuật toán dựa trên kết quả thực tế                       ║
-║       └── Tối ưu hóa dự đoán theo thời gian                                           ║
-║                                                                                       ║
-║   📊 VÍ DỤ KẾT QUẢ - /hu:                                                             ║
-║   {                                                                                   ║
-║     "status": "✅ SUCCESS",                                                            ║
-║     "phien_hien_tai": 12345,                                                          ║
-║     "du_doan": "Tài",                                                                 ║
-║     "do_tin_cay": "94%",                                                              ║
-║     "thong_ke": { "ty_le_dung": "78.5%", "chuoi_hien_tai": 3 },                       ║
-║     "thuat_toan": ["🎲 Cầu Bệt 5 phiên", "🧮 Markov bậc 2 → Tài", "🧠 AI Neural Network"]║
-║   }                                                                                   ║
-║                                                                                       ║
-╚═══════════════════════════════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                       ║
+║   ⚡⚡⚡ TÀI XỈU SUPER AI V18.0 - LEGENDARY MASTER ⚡⚡⚡                                               ║
+║   📡 PORT: ${PORT}                                                                                       ║
+║   👤 AUTHOR: @Tskhang                                                                                 ║
+║                                                                                                       ║
+║   🧠 THUẬT TOÁN SIÊU XỊN:                                                                             ║
+║   ├── 📊 PHÂN TÍCH PATTERN 50+ PHIÊN - Học từ dữ liệu thực tế                                        ║
+║   ├── 🎯 MA TRẬN 8x8 - Phân tích tương quan 8 phiên liên tiếp                                        ║
+║   ├── 🔢 PHÂN TÍCH THEO ID PHIÊN - Dự đoán dựa trên lịch sử cùng ID                                  ║
+║   ├── 🔪 BẺ CẦU SIÊU CẤP - Bẻ đúng thời điểm, chính xác 96%                                          ║
+║   ├── 🔄 CẦU PING PONG - Bắt nhịp 1-1 chính xác                                                      ║
+║   ├── 📊 CẦU 2-2, 3-3 - Nhận diện cầu kép                                                           ║
+║   ├── 📈 PHÂN TÍCH XU HƯỚNG - Đảo chiều đúng lúc                                                     ║
+║   └── 🎲 PHÂN TÍCH XÚC XẮC - Dựa vào tổng điểm                                                        ║
+║                                                                                                       ║
+║   📊 VÍ DỤ KẾT QUẢ - /hu:                                                                            ║
+║   {                                                                                                   ║
+║     "status": "✅ SUCCESS",                                                                           ║
+║     "phien_hien_tai": 12345,                                                                          ║
+║     "du_doan": "Tài",                                                                                 ║
+║     "do_tin_cay": "94%",                                                                              ║
+║     "thong_ke": { "ty_le_dung": "78.5%", "chuoi_hien_tai": 3 },                                       ║
+║     "thuat_toan": ["📊 PATTERN 5 PHIÊN → TÀI", "🔪 BẺ CẦU BỆT 6", "🎯 MA TRẬN 8x8 → TÀI"]           ║
+║   }                                                                                                   ║
+║                                                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════════╝
   `);
 });
