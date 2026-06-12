@@ -1,18 +1,16 @@
 {
-  "name": "taixiu-api",
+  "name": "ai-prediction-server",
   "version": "1.0.0",
-  "description": "API dự đoán Tài Xỉu LC79 - @anhquan",
+  "description": "Smart Random Predictor",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^4.18.2",
-    "axios": "^1.6.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "author": "@anhquan",
-  "license": "MIT"
+    "node-fetch": "^3.3.2",
+    "seedrandom": "^3.0.5" 
+  }
 }
