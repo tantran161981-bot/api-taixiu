@@ -11,7 +11,7 @@ const API_URLS = {
     betvip_md5: 'https://wtxmd52.macminim6.online/v1/txmd5/lite-sessions?cp=R&cl=R&pf=web&at=7aa1c7e7ea0160fd97524740774a4c61'
 };
 
-// ==================== LẤY DỮ LIỆU TỪ API (GIỮ NGUYÊN ID GỐC) ====================
+// ==================== LẤY DỮ LIỆU TỪ API ====================
 async function fetchGameData(apiUrl) {
     try {
         const response = await axios.get(apiUrl, { timeout: 8000 });
@@ -76,7 +76,7 @@ function deepAnalysis(h, gameId = null) {
         }
         confBase = 98;
     } 
-    // ================= CÁC GAME KHÁC (LC79 HU, BETVIP HU/MD5 ĐỀU CHẠY THUẬT TOÁN NÀY) =================
+    // ================= TẤT CẢ CÁC GAME KHÁC (LC79 HU, BETVIP HU, BETVIP MD5) =================
     else {
         let fastDerivativePred = -1;
         if (h.length >= 6) {
@@ -261,8 +261,8 @@ function deepAnalysis(h, gameId = null) {
     };
 }
 
-// ==================== DỰ ĐOÁN CHO LC79 (GIỮ NGUYÊN 100%) ====================
-async function predictLC79(gameId, apiUrl) {
+// ==================== DỰ ĐOÁN TẤT CẢ GAME (GIỐNG NHAU 100%) ====================
+async function predict(gameId, apiUrl) {
     const data = await fetchGameData(apiUrl);
     if (!data || data.length < 5) {
         return { error: "Không thể lấy dữ liệu", phien_hien_tai: 0, du_doan: "Lỗi", do_tin_cay: "0%" };
@@ -280,38 +280,6 @@ async function predictLC79(gameId, apiUrl) {
     };
 }
 
-// ==================== DỰ ĐOÁN CHO BETVIP (NGƯỢC VỚI KẾT QUẢ CỦA TOOL HTML) ====================
-async function predictBetVIP(gameId, apiUrl) {
-    const data = await fetchGameData(apiUrl);
-    if (!data || data.length < 5) {
-        return { error: "Không thể lấy dữ liệu", phien_hien_tai: 0, du_doan: "Lỗi", do_tin_cay: "0%" };
-    }
-    
-    const latestId = data[0].id;
-    const historyResults = data.map(item => item.result);
-    
-    // Lấy kết quả dự đoán từ thuật toán GIỐNG HỆT TOOL HTML
-    const originalPrediction = deepAnalysis(historyResults, gameId);
-    
-    // ĐẢO NGƯỢC KẾT QUẢ: Tài -> Xỉu, Xỉu -> Tài
-    let reversedPrediction = "";
-    if (originalPrediction.predictionText === "Tài") {
-        reversedPrediction = "Xỉu";
-    } else if (originalPrediction.predictionText === "Xỉu") {
-        reversedPrediction = "Tài";
-    } else {
-        reversedPrediction = "Chờ";
-    }
-    
-    const currentPhien = latestId + 1;
-    
-    return {
-        phien_hien_tai: currentPhien,
-        du_doan: reversedPrediction,
-        do_tin_cay: "99%"  // BETVIP giữ độ tin cậy cao
-    };
-}
-
 // ==================== API ENDPOINTS ====================
 
 app.get('/', (req, res) => {
@@ -319,19 +287,19 @@ app.get('/', (req, res) => {
         name: "TÀI XỈU SUPER AI API",
         version: "7.0",
         author: "ANH QUAN",
-        description: "LC79 giữ nguyên 100% thuật toán từ tool HTML, BETVIP dự đoán NGƯỢC",
+        description: "LC79 & BETVIP đều giống 100% thuật toán từ tool HTML",
         endpoints: {
-            "/lc79-hu": "Dự đoán LC79 Tài Xỉu Hũ (giữ nguyên)",
-            "/lc79-md5": "Dự đoán LC79 Tài Xỉu MD5 (giữ nguyên)",
-            "/betvip-hu": "Dự đoán BETVIP Tài Xỉu Hũ (NGƯỢC với tool)",
-            "/betvip-md5": "Dự đoán BETVIP Tài Xỉu MD5 (NGƯỢC với tool)"
+            "/lc79-hu": "Dự đoán LC79 Tài Xỉu Hũ",
+            "/lc79-md5": "Dự đoán LC79 Tài Xỉu MD5",
+            "/betvip-hu": "Dự đoán BETVIP Tài Xỉu Hũ",
+            "/betvip-md5": "Dự đoán BETVIP Tài Xỉu MD5"
         }
     });
 });
 
 app.get('/lc79-hu', async (req, res) => {
     try {
-        const result = await predictLC79('lc79_hu', API_URLS.lc79_hu);
+        const result = await predict('lc79_hu', API_URLS.lc79_hu);
         if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
@@ -341,7 +309,7 @@ app.get('/lc79-hu', async (req, res) => {
 
 app.get('/lc79-md5', async (req, res) => {
     try {
-        const result = await predictLC79('lc79_md5', API_URLS.lc79_md5);
+        const result = await predict('lc79_md5', API_URLS.lc79_md5);
         if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
@@ -351,7 +319,7 @@ app.get('/lc79-md5', async (req, res) => {
 
 app.get('/betvip-hu', async (req, res) => {
     try {
-        const result = await predictBetVIP('betvip_hu', API_URLS.betvip_hu);
+        const result = await predict('betvip_hu', API_URLS.betvip_hu);
         if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
@@ -361,7 +329,7 @@ app.get('/betvip-hu', async (req, res) => {
 
 app.get('/betvip-md5', async (req, res) => {
     try {
-        const result = await predictBetVIP('betvip_md5', API_URLS.betvip_md5);
+        const result = await predict('betvip_md5', API_URLS.betvip_md5);
         if (result.error) return res.status(500).json(result);
         res.json(result);
     } catch (error) {
@@ -379,11 +347,10 @@ app.listen(PORT, '0.0.0.0', () => {
 ║   👤 AUTHOR: ANH QUAN                                                     ║
 ║                                                                           ║
 ║   🧠 THUẬT TOÁN:                                                          ║
-║      ├─ LC79: GIỮ NGUYÊN 100% THUẬT TOÁN TỪ TOOL HTML                    ║
-║      │   ├─ V1-V7, LC79 MD5 đặc biệt, phân tích sâu                      ║
-║      │                                                                   ║
-║      └─ BETVIP: DỰ ĐOÁN NGƯỢC VỚI KẾT QUẢ CỦA TOOL HTML                  ║
-║          (Tài -> Xỉu, Xỉu -> Tài)                                        ║
+║      ├─ LC79 HŨ:    GIỐNG 100% TOOL HTML                                 ║
+║      ├─ LC79 MD5:   GIỐNG 100% TOOL HTML (có logic đặc biệt)             ║
+║      ├─ BETVIP HŨ:  GIỐNG 100% TOOL HTML                                 ║
+║      └─ BETVIP MD5: GIỐNG 100% TOOL HTML                                 ║
 ║                                                                           ║
 ║   📡 CÁCH TÍNH PHIÊN: latest.id + 1 (GIỐNG TOOL HTML)                    ║
 ║                                                                           ║
