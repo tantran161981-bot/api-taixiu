@@ -1,7 +1,7 @@
 {
-  "name": "godmode-prediction-api",
+  "name": "packet-byte-analyzer",
   "version": "2.0.0",
-  "description": "GOD MODE Prediction API - Độ chính xác 85-95%",
+  "description": "Packet & Byte Analyzer for Tai Xiu Prediction",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
