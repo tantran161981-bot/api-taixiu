@@ -1,21 +1,27 @@
 {
-  "name": "advanced-markov-analyzer-api",
-  "version": "2.0.0",
-  "description": "Advanced Markov Analyzer API for Tai Xiu & LC79 Prediction - Lưu nhiều phiên phân tích pattern",
+  "name": "tskhang-tai-xiu-api",
+  "version": "8.0.0",
+  "description": "🎲 Tskhang - API Dự Đoán Tài Xỉu Lẩu Cua 79 với thuật toán Markov, Elliott Wave, Pattern Recognition",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "pm2": "pm2 start server.js --name tskhang-api",
+    "pm2-stop": "pm2 stop tskhang-api",
+    "pm2-logs": "pm2 logs tskhang-api"
   },
   "keywords": [
-    "markov-chain",
-    "taixiu",
-    "lc79",
+    "tai-xiu",
     "prediction",
-    "pattern-analysis",
-    "ensemble-voting"
+    "markov-chain",
+    "elliott-wave",
+    "pattern-recognition",
+    "api",
+    "express",
+    "taixiu",
+    "lẩu-cua-79"
   ],
-  "author": "@tiendataox",
+  "author": "@Tskhang",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
