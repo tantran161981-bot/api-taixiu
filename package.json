@@ -1,21 +1,38 @@
 {
-  "name": "lc79-prediction-api",
+  "name": "taixiu-ai-prediction-api",
   "version": "2.0.0",
-  "description": "LC79 Tài Xỉu Prediction API - Cookie Bất Tử",
+  "description": "API Dự Đoán Tài Xỉu SIÊU XỊN - Tích hợp 30+ AI & 1000+ thuật toán",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
+  "keywords": [
+    "taixiu",
+    "prediction",
+    "ai",
+    "zalo",
+    "lc79",
+    "betvip",
+    "tai xiu",
+    "algorithm",
+    "machine learning"
+  ],
+  "author": "DauTen",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "axios": "^1.6.0"
+    "axios": "^1.6.2",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/taixiu-ai-prediction-api"
   }
 }
