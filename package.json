@@ -1,22 +1,20 @@
 {
-  "name": "taixiu-ai-prediction-api",
+  "name": "lc79-ai-prediction-api",
   "version": "2.0.0",
-  "description": "API Dự Đoán Tài Xỉu SIÊU XỊN - Tích hợp 30+ AI & 1000+ thuật toán",
+  "description": "LC79 Tài Xỉu AI Prediction API - Tích hợp 30+ AI & 1000+ thuật toán",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
   "keywords": [
+    "lc79",
     "taixiu",
     "prediction",
     "ai",
     "zalo",
-    "lc79",
-    "betvip",
     "tai xiu",
-    "algorithm",
-    "machine learning"
+    "algorithm"
   ],
   "author": "DauTen",
   "license": "MIT",
@@ -30,9 +28,5 @@
   },
   "engines": {
     "node": ">=16.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/taixiu-ai-prediction-api"
   }
 }
