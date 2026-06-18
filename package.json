@@ -1,7 +1,7 @@
 {
-  "name": "lc79-ai-prediction-api",
-  "version": "2.0.0",
-  "description": "LC79 Tài Xỉu AI Prediction API - Tích hợp 30+ AI & 1000+ thuật toán",
+  "name": "ultimate-machine-v4",
+  "version": "4.0.0",
+  "description": "ULTIMATE MACHINE v4.0 - LC79 Prediction API (Bỏ BetVIP)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,16 +11,16 @@
     "lc79",
     "taixiu",
     "prediction",
-    "ai",
-    "zalo",
-    "tai xiu",
-    "algorithm"
+    "api",
+    "ultimate-machine",
+    "sse",
+    "realtime"
   ],
-  "author": "DauTen",
+  "author": "Krexs Cliver",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "axios": "^1.6.2",
+    "axios": "^1.6.0",
     "cors": "^2.8.5"
   },
   "devDependencies": {
